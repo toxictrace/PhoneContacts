@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Стандартные цвета Material 3 / Material Components -->
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- Цвета для виджета (могут быть другими) -->
+    <color name="widget_background_color">#B3FFFFFF</color> <!-- Полупрозрачный белый -->
+    <color name="widget_text_color">#FF000000</color>
+
+    <!-- Цвета для конфигурации (Material Components должны подобрать их сами из темы) -->
+    <!-- <color name="config_background">#FFEEEEEE</color> --> <!-- Лучше использовать атрибуты темы -->
+</resources>

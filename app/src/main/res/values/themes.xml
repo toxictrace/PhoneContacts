@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Базовая тема приложения (Material 3 DayNight без ActionBar) -->
+    <style name="Theme.PhoneContacts" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Основные цвета Material 3 -->
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/purple_700</item>
+        <item name="colorOnPrimaryContainer">@color/white</item>
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorSecondaryContainer">@color/teal_700</item>
+        <item name="colorOnSecondaryContainer">@color/black</item>
+        <!-- Цвет статус бара -->
+        <item name="android:statusBarColor">?attr/colorPrimaryContainer</item>
+        <!-- Стандартные цвета фона и текста -->
+        <item name="colorSurface">?android:colorBackground</item>
+        <item name="colorOnSurface">?android:textColorPrimary</item>
+        <!-- Другие атрибуты Material 3 можно добавить здесь -->
+    </style>
+
+    <!-- Тема для Activity Конфигурации -->
+    <style name="Theme.PhoneContacts.Configuration" parent="Theme.PhoneContacts">
+        <item name="android:windowBackground">?attr/colorSurface</item>
+        <!-- Дополнительные настройки для экрана конфигурации, если нужны -->
+    </style>
+
+    <!-- Тема для Activity Подтверждения Звонка (Диалог) -->
+    <style name="Theme.PhoneContacts.CallConfirmDialog" parent="Theme.Material3.DayNight.Dialog.MinWidth">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.7</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
+        <item name="android:windowMinWidthMajor">85%</item>
+        <item name="android:windowMinWidthMinor">85%</item>
+    </style>
+
+</resources>

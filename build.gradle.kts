@@ -1,0 +1,6 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+// Обычно здесь ничего менять не нужно для базового проекта
+plugins {
+    id("com.android.application") version "8.9.1" apply false // Используй актуальную версию AGP
+    id("org.jetbrains.kotlin.android") version "1.9.22" apply false // Используй актуальную версию Kotlin
+}
