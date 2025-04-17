@@ -6,25 +6,29 @@
     android:layout_height="match_parent"
     tools:context=".SelectContactsActivity">
 
+    <!-- AppBar с Toolbar -->
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar">
+        android:theme="?attr/actionBarTheme"> <!-- Используем атрибут темы для AppBar -->
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar_select"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:title="@string/select_contacts_activity_label"
-        app:navigationIcon="@drawable/ic_close_24" />
+            app:navigationIcon="@drawable/ic_close_24"
+            app:navigationContentDescription="@string/cancel"/> <!-- Описание для кнопки Назад/Закрыть -->
 
     </com.google.android.material.appbar.AppBarLayout>
 
+    <!-- Основной контент -->
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+        <!-- Список контактов -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view_all_contacts"
             android:layout_width="match_parent"
@@ -32,42 +36,64 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/configure_contact_item"/>
 
-        <!-- Элементы состояния (загрузка, ошибка, пусто) -->
+        <!-- Элементы состояния (загрузка, ошибка, пусто, разрешение) -->
+        <!-- Прогресс бар -->
         <ProgressBar
             android:id="@+id/progress_bar_select"
             style="?android:attr/progressBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:visibility="gone"/>
-        <TextView
-            android:id="@+id/text_permission_select"
+            android:visibility="gone"
+            tools:visibility="visible"/>
+
+        <!-- Сообщение об ошибке или необходимости разрешения -->
+        <LinearLayout
+            android:id="@+id/layout_status_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:layout_gravity="center"
-            android:text="@string/permission_needed_select"
-        android:textAppearance="?attr/textAppearanceBody1"
-        android:visibility="gone"
-        android:gravity="center"
-        android:padding="16dp"/>
-        <Button
-            android:id="@+id/button_grant_permission_select"
+            android:gravity="center_horizontal"
+            android:padding="16dp"
+            android:visibility="gone"
+            tools:visibility="gone"> <!-- Скрываем всю группу по умолчанию -->
+
+            <TextView
+                android:id="@+id/text_status_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="40dp"
-            android:text="@string/grant_permission_button"
-        android:visibility="gone"/>
+            android:textAlignment="center"
+            android:textAppearance="?attr/textAppearanceBody1"
+            tools:text="@string/permission_needed_select"/>
+
+            <Button
+                android:id="@+id/button_grant_permission_select"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/grant_permission_button"
+                android:visibility="gone"
+            tools:visibility="visible"/>
+
+        </LinearLayout>
+
+        <!-- Сообщение "Нет контактов" -->
         <TextView
             android:id="@+id/text_no_contacts_select"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/no_contacts_found"
-        android:visibility="gone"/>
+            android:textAppearance="?attr/textAppearanceBody1"
+            android:visibility="gone"
+            tools:visibility="gone"/>
+
 
     </FrameLayout>
 
+    <!-- Кнопка "Готово" -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_done_select"
         android:layout_width="wrap_content"
@@ -75,6 +101,6 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:contentDescription="@string/fab_description_done"
-    app:srcCompat="@drawable/ic_done_24" />
+        app:srcCompat="@drawable/ic_done_24" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

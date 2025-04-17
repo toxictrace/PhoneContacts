@@ -1,6 +1,6 @@
 <resources>
     <!-- Название приложения -->
-    <string name="app_name">Phone Contacts</string>
+    <string name="app_name">Phone Contacts</string> <!-- Оставить Phone Contacts или перевести? -->
 
     <!-- Строки для MainActivity -->
     <string name="main_activity_label">Главная</string>
@@ -26,22 +26,22 @@
     <string name="widget_config_title">Настройка виджета контактов</string>
     <string name="configure_title">Настройка виджета</string>
     <!-- Заголовки секций -->
-    <string name="settings_theme_header">Тема приложения</string> <!-- <<< NEW >>> -->
+    <string name="settings_theme_header">Тема приложения</string>
     <string name="settings_appearance_header">Внешний вид</string>
     <string name="settings_contacts_header">Контакты</string>
     <string name="settings_actions_header">Действия</string>
     <string name="settings_widget_buttons_header">Кнопки виджета</string>
     <string name="settings_backup_header">Сохранение/Загрузка</string>
     <!-- Элементы настроек -->
-    <string name="setting_monet_theme_title">Динамическая тема (Monet)</string> <!-- <<< NEW >>> -->
-    <string name="setting_monet_theme_summary_on">Цвета темы основаны на обоях</string> <!-- <<< NEW >>> -->
-    <string name="setting_monet_theme_summary_off">Используется стандартная тема</string> <!-- <<< NEW >>> -->
-    <string name="applying_theme_toast">Применение темы...</string> <!-- <<< NEW >>> -->
+    <string name="setting_monet_theme_title">Динамическая тема (Monet)</string>
+    <string name="setting_monet_theme_summary_on">Цвета темы основаны на обоях</string>
+    <string name="setting_monet_theme_summary_off">Используется стандартная тема</string>
+    <string name="applying_theme_toast">Применение темы...</string>
     <string name="num_columns">Количество колонок</string>
     <string name="item_height_title">Высота элемента (dp)</string>
     <string name="contacts_order_title">Порядок контактов</string>
     <string name="max_items_title">Макс. количество контактов</string>
-    <string name="max_items_summary">Укажите максимальное число контактов для отображения в виджете.</string>
+    <string name="max_items_summary">Укажите максимальное число контактов для отображения в виджете.</string> <!-- Используется в диалоге -->
     <string name="enter_number">Введите число</string>
     <string name="select_favorites_title">Выбрать избранные</string>
     <string name="select_favorites_summary">Выбрано: %d</string>
@@ -56,31 +56,32 @@
     <string name="setting_show_refresh_button_title">Показать кнопку "Обновить"</string>
     <string name="setting_show_refresh_button_summary_on">Кнопка для ручного обновления виджета будет видна</string>
     <string name="setting_show_refresh_button_summary_off">Кнопка обновления будет скрыта</string>
-    <string name="setting_filter_old_unknown_title">Фильтровать старые неизвестные</string>
+    <string name="setting_filter_old_unknown_title">Скрывать старые неизвестные</string> <!-- Изменено -->
     <string name="setting_filter_old_unknown_summary_on">Неизвестные номера старше 2 дней будут скрыты</string>
     <string name="setting_filter_old_unknown_summary_off">Все неизвестные будут показаны (если включено выше)</string>
     <string name="setting_compare_digits_title">Цифр для сравнения номера</string>
-    <string name="setting_compare_digits_summary">Количество последних цифр для поиска в журнале.</string>
+    <!-- <string name="setting_compare_digits_summary">Количество последних цифр для поиска в журнале.</string> --> <!-- Убрано -->
+    <string name="setting_compare_digits_summary_with_value">Последние %d цифры для поиска</string> <!-- <<< NEW/UPDATED >>> -->
     <string name="setting_unknown_avatar_title">Аватар для неизвестных/без фото</string>
-    <string name="save_config">Сохранить</string>
-    <string name="save_configuration">Сохранить конфигурацию</string>
+    <string name="save_config">Сохранить</string> <!-- Используется? -->
+    <string name="save_configuration">Сохранить конфигурацию</string> <!-- FAB -->
     <string name="error_invalid_number">Пожалуйста, введите положительное число.</string>
-    <string name="error_only_one_widget">Можно добавить только один виджет этого типа.</string>
+    <string name="error_only_one_widget">Можно добавить только один виджет этого типа.</string> <!-- Не используется? -->
     <string name="export_cancelled">Экспорт отменен</string>
     <string name="import_cancelled">Импорт отменен</string>
     <string name="error_not_implemented">Не реализовано</string>
-    <string name="permission_required_toast">Требуется разрешение</string>
-    <string name="permission_denied_toast">Нет разрешения</string>
+    <string name="permission_required_toast">Требуется разрешение</string> <!-- Общее -->
+    <string name="permission_denied_toast">В разрешении отказано</string> <!-- Общее -->
     <string name="error_settings_json_not_found">settings.json не найден в бэкапе</string>
     <string name="error_input_stream_null">Не удалось открыть поток данных</string>
+    <string name="error_opening_output_stream">Не удалось открыть поток для записи</string> <!-- <<< NEW >>> -->
     <string name="error_no_settings_found_in_backup">В файле бэкапа не найдено настроек для установленных виджетов.</string>
     <string name="error_invalid_backup_file_name">Выбран неверный файл бэкапа. Имя должно начинаться с \'PhoneContacts_\' и иметь расширение \'.zip\'.</string>
-    <string name="no_widget_settings_found_in_backup">В файле бэкапа не найдено настроек для установленных виджетов.</string>
+    <string name="no_widget_settings_found_in_backup">В файле бэкапа не найдено настроек для установленных виджетов.</string> <!-- Дубликат? -->
 
     <!-- Строки для опций порядка сортировки -->
     <string name="sort_order_favorites">Избранные</string>
     <string name="sort_order_favorites_recents">Избранные и Недавние</string>
-    <!-- <<< ИЗМЕНЕНИЕ: Добавлена строка для новой опции >>> -->
     <string name="sort_order_favorites_recents_frequent">Избранные, Недавние и Частые</string>
     <string name="sort_order_favorites_frequent">Избранные и Частые</string>
 
@@ -98,14 +99,15 @@
     <string name="error_copying_avatar_unknown">Неизвестная ошибка копирования аватара</string>
     <string name="avatar_set_successfully">Аватар установлен</string>
     <string name="error_launching_picker">Не удалось запустить выбор изображения</string>
+    <string name="processing_avatar">Обработка аватара…</string> <!-- <<< NEW >>> -->
 
 
     <!-- Строки для Activity выбора контактов (SelectContactsActivity) -->
     <string name="select_contacts_activity_label">Выбор контактов</string>
-    <string name="select_contacts_done">Готово</string>
+    <!-- <string name="select_contacts_done">Готово</string> --> <!-- Убрано -->
     <string name="permission_needed_select">Для выбора контактов требуется разрешение на доступ к контактам.</string>
     <string name="permission_denied_select">Разрешение на доступ к контактам отклонено.</string>
-    <string name="error_permission_needed_select_toast">Без разрешения невозможно выбрать контакты.</string>
+    <string name="error_permission_needed_select_toast">Без разрешения невозможно выбрать контакты.</string> <!-- Используется? -->
     <string name="no_contacts_found">Контакты с номерами телефонов не найдены.</string>
     <string name="error_loading_contacts">Ошибка загрузки контактов.</string>
     <string name="grant_permission_button">Предоставить разрешение</string>
@@ -114,9 +116,9 @@
     <string name="content_desc_move_down">Переместить вниз</string>
 
     <!-- Строки для Activity подтверждения звонка (CallConfirmActivity) -->
-    <string name="call_confirm_title">Позвонить?</string>
-    <string name="call_confirm_call_button">Позвонить</string>
-    <string name="call_confirm_cancel_button">Отмена</string>
+    <string name="call_confirm_title">Позвонить?</string> <!-- Заголовок диалога (не используется) -->
+    <string name="call_confirm_call_button">Позвонить</string> <!-- Описание кнопки -->
+    <string name="call_confirm_cancel_button">Отмена</string> <!-- Описание кнопки -->
     <string name="unknown_contact">Неизвестный</string>
     <string name="error_phone_number_missing">Ошибка: номер телефона не найден.</string>
     <string name="error_no_call_app">Не найдено приложение для звонка.</string>
@@ -127,8 +129,8 @@
     <string name="error_opening_dialer">Не удалось открыть звонилку</string>
     <!-- Статистика звонков -->
     <string name="last_call_label">Последний звонок:</string>
-    <string name="call_count_label">Звонков:</string>
-    <string name="total_duration_label">Длительность:</string>
+    <!-- <string name="call_count_label">Звонков:</string> --> <!-- Убрано -->
+    <!-- <string name="total_duration_label">Длительность:</string> --> <!-- Убрано -->
     <string name="call_stats_not_available">Статистика недоступна</string>
     <string name="call_stats_permission_needed">Нужно разрешение на чтение журнала звонков</string>
     <!-- Форматирующие строки для статистики -->
@@ -139,21 +141,29 @@
     <string name="permission_needed_title">Требуется разрешение</string>
     <string name="grant_permission">Предоставить</string>
     <string name="continue_without_permission">Продолжить без разрешения</string>
-    <string name="permission_needed">Требуется разрешение</string>
+    <string name="permission_needed">Требуется разрешение</string> <!-- Общее -->
     <string name="permission_call_needed_for_call_options">Для опций "Звонок" и "Подтверждение звонка" требуется разрешение на совершение вызовов.</string>
-    <string name="permission_call_log_needed_favorites_recents">Для отображения недавних звонков в виджете требуется разрешение на доступ к журналу вызовов.</string>
-    <string name="warning_recents_unavailable">Предупреждение: Недавние звонки не будут отображаться без разрешения.</string>
+    <string name="permission_call_log_needed_favorites_recents">Для отображения недавних и частых звонков в виджете требуется разрешение на доступ к журналу вызовов.</string>
+    <string name="warning_recents_unavailable">Предупреждение: Недавние/Частые звонки не будут отображаться без разрешения.</string>
     <string name="call_permission_revoked">Разрешение на звонки было отозвано. Открываю номер в звонилке.</string>
     <string name="permission_contacts_rationale">Разрешение на доступ к контактам необходимо для отображения их в виджете и выбора избранных.</string>
     <string name="permission_storage_needed_for_avatar">Для выбора своего аватара требуется разрешение на доступ к изображениям.</string>
+    <string name="permissions_needed_for_save">Для сохранения этой конфигурации необходимы разрешения.</string> <!-- <<< NEW >>> -->
+    <!-- Имена разрешений -->
+    <string name="permission_contacts_name">Контакты</string> <!-- <<< NEW >>> -->
+    <string name="permission_call_log_name">Журнал звонков</string> <!-- <<< NEW >>> -->
+    <string name="permission_call_phone_name">Телефонные вызовы</string> <!-- <<< NEW >>> -->
+    <string name="permission_storage_images_name">Изображения</string> <!-- <<< NEW >>> -->
+    <string name="permissions_missing_toast">Отсутствуют разрешения: %s. Предоставьте их для сохранения.</string> <!-- <<< NEW >>> -->
+
 
     <!-- Строки для диалога MIUI (DeviceUtils) -->
-    <string name="miui_dialog_title">Дополнительные разрешения</string>
-    <string name="miui_dialog_message">На устройствах Xiaomi (MIUI)...</string> <!-- Полный текст в DeviceUtils.kt -->
+    <string name="miui_dialog_title">Дополнительные разрешения (MIUI)</string>
+    <string name="miui_dialog_message">На устройствах Xiaomi (MIUI) для корректной работы виджета (особенно для совершения звонков по клику и отображения поверх других окон) может потребоваться вручную включить разрешения в разделе \'Другие разрешения\':\n\n• Отображение всплывающих окон\n• Ярлыки рабочего стола</string>
     <string name="miui_dialog_settings_button">Перейти в настройки</string>
     <string name="miui_dialog_acknowledge_button">Понятно / Позже</string>
     <string name="miui_dialog_cant_open_settings">Не удалось открыть настройки. Пожалуйста, сделайте это вручную.</string>
-    <string name="miui_dialog_check_permissions_later">Проверьте \'Другие разрешения\' в настройках приложения.</string>
+    <string name="miui_dialog_check_permissions_later">Не забудьте проверить \'Другие разрешения\' в настройках приложения.</string>
 
     <!-- Общие строки -->
     <string name="unknown">Неизвестный</string>
@@ -163,16 +173,20 @@
     <string name="settings_export_summary">Сохранить настройки всех виджетов в файл (ZIP)</string>
     <string name="settings_import_title">Импорт настроек</string>
     <string name="settings_import_summary">Загрузить настройки для виджетов из файла (ZIP)</string>
-    <string name="backup_successful">Настройки экспортированы</string>
+    <string name="backup_successful">Настройки успешно экспортированы</string>
     <string name="backup_failed">Ошибка экспорта: %s</string>
-    <string name="restore_successful">Настройки импортированы</string>
+    <string name="restore_successful">Настройки успешно импортированы</string>
     <string name="restore_failed">Ошибка импорта: %s</string>
+    <string name="backup_started">Начат экспорт…</string> <!-- <<< NEW >>> -->
+    <string name="restore_started">Начат импорт…</string> <!-- <<< NEW >>> -->
     <string name="no_widgets_to_backup">Нет активных виджетов для экспорта</string>
     <string name="no_widgets_to_restore">Нет активных виджетов для импорта</string>
     <string name="error_reading_file">Ошибка чтения файла: %s</string>
     <string name="error_writing_file">Ошибка записи файла</string>
     <string name="error_parsing_backup">Ошибка разбора файла бэкапа: %s</string>
     <string name="error_reading_zip">Ошибка чтения ZIP-архива: %s</string>
-    <string name="settings_reloading">Перезагрузка настроек...</string>
+    <string name="settings_reloading">Перезагрузка настроек…</string>
+    <string name="error_opening_confirmation">Не удалось открыть диалог подтверждения</string>
+    <string name="error_opening_input_stream">Не удалось открыть поток чтения</string>
 
 </resources>

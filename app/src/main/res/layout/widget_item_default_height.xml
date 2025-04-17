@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/widget_item_container"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/widget_item_default_height"> <!-- Используем размер из dimens -->
+    android:layout_height="130dp"> <!-- Используем размер из dimens -->
 
     <!-- Изображение контакта (или аватар) -->
     <ImageView

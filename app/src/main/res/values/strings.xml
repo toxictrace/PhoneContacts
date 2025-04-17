@@ -16,7 +16,7 @@
     <string name="widget_label">Contacts Grid</string>
     <string name="widget_description">Displays selected contacts for quick access.</string>
     <string name="widget_empty_text">No contacts selected or loaded</string>
-    <string name="widget_loading">Loading…</string> <!-- Reuse loading -->
+    <!-- <string name="widget_loading">Loading…</string> --> <!-- Reuse loading -->
     <string name="widget_content_desc_dialer">Open call log</string>
     <string name="widget_content_desc_refresh">Refresh widget</string>
     <string name="widget_content_desc_call_type">Last call type</string>
@@ -26,22 +26,22 @@
     <string name="widget_config_title">Contacts Widget Settings</string>
     <string name="configure_title">Widget Settings</string>
     <!-- Section Headers -->
-    <string name="settings_theme_header">App Theme</string> <!-- <<< NEW >>> -->
+    <string name="settings_theme_header">App Theme</string>
     <string name="settings_appearance_header">Appearance</string>
     <string name="settings_contacts_header">Contacts</string>
     <string name="settings_actions_header">Actions</string>
     <string name="settings_widget_buttons_header">Widget Buttons</string>
     <string name="settings_backup_header">Backup/Restore</string>
     <!-- Settings Items -->
-    <string name="setting_monet_theme_title">Dynamic Theme (Monet)</string> <!-- <<< NEW >>> -->
-    <string name="setting_monet_theme_summary_on">Theme colors based on wallpaper</string> <!-- <<< NEW >>> -->
-    <string name="setting_monet_theme_summary_off">Using standard theme</string> <!-- <<< NEW >>> -->
-    <string name="applying_theme_toast">Applying theme...</string> <!-- <<< NEW >>> -->
+    <string name="setting_monet_theme_title">Dynamic Theme (Monet)</string>
+    <string name="setting_monet_theme_summary_on">Theme colors based on wallpaper</string>
+    <string name="setting_monet_theme_summary_off">Using standard theme</string>
+    <string name="applying_theme_toast">Applying theme...</string>
     <string name="num_columns">Number of columns</string>
     <string name="item_height_title">Item height (dp)</string>
     <string name="contacts_order_title">Contact order</string>
     <string name="max_items_title">Max number of contacts</string>
-    <string name="max_items_summary">Set the maximum number of contacts to display in the widget.</string>
+    <string name="max_items_summary">Set the maximum number of contacts to display in the widget.</string> <!-- Used in Dialog -->
     <string name="enter_number">Enter number</string>
     <string name="select_favorites_title">Select favorites</string>
     <string name="select_favorites_summary">Selected: %d</string>
@@ -60,27 +60,28 @@
     <string name="setting_filter_old_unknown_summary_on">Unknown numbers older than 2 days will be hidden</string>
     <string name="setting_filter_old_unknown_summary_off">All unknown numbers will be shown (if enabled above)</string>
     <string name="setting_compare_digits_title">Digits to compare number</string>
-    <string name="setting_compare_digits_summary">Number of last digits for searching in call log.</string>
+    <!-- <string name="setting_compare_digits_summary">Number of last digits for searching in call log.</string> --> <!-- Removed, use value below -->
+    <string name="setting_compare_digits_summary_with_value">Last %d digits for matching</string> <!-- <<< NEW/UPDATED >>> -->
     <string name="setting_unknown_avatar_title">Avatar for unknown/no photo</string>
-    <string name="save_config">Save</string>
-    <string name="save_configuration">Save configuration</string>
+    <string name="save_config">Save</string> <!-- Used internally? -->
+    <string name="save_configuration">Save configuration</string> <!-- FAB contentDescription -->
     <string name="error_invalid_number">Please enter a positive number.</string>
-    <string name="error_only_one_widget">Only one widget of this type can be added.</string>
+    <string name="error_only_one_widget">Only one widget of this type can be added.</string> <!-- Not used? -->
     <string name="export_cancelled">Export cancelled</string>
     <string name="import_cancelled">Import cancelled</string>
     <string name="error_not_implemented">Not implemented</string>
-    <string name="permission_required_toast">Permission required</string>
-    <string name="permission_denied_toast">Permission denied</string>
+    <string name="permission_required_toast">Permission required</string> <!-- Generic -->
+    <string name="permission_denied_toast">Permission denied</string> <!-- Generic -->
     <string name="error_settings_json_not_found">settings.json not found in backup</string>
     <string name="error_input_stream_null">Failed to open data stream</string>
+    <string name="error_opening_output_stream">Failed to open output stream</string> <!-- <<< NEW >>> -->
     <string name="error_no_settings_found_in_backup">No settings found for installed widgets in the backup file.</string>
     <string name="error_invalid_backup_file_name">Invalid backup file selected. Name must start with \'PhoneContacts_\' and have a \'.zip\' extension.</string>
-    <string name="no_widget_settings_found_in_backup">No settings found for installed widgets in the backup file.</string>
+    <string name="no_widget_settings_found_in_backup">No settings found for installed widgets in the backup file.</string> <!-- Duplicate? Remove one -->
 
     <!-- Sort Order Options -->
     <string name="sort_order_favorites">Favorites</string>
     <string name="sort_order_favorites_recents">Favorites and Recents</string>
-    <!-- <<< ИЗМЕНЕНИЕ: Добавлена строка для новой опции >>> -->
     <string name="sort_order_favorites_recents_frequent">Favorites, Recents and Frequent</string>
     <string name="sort_order_favorites_frequent">Favorites and Frequent</string>
 
@@ -98,13 +99,14 @@
     <string name="error_copying_avatar_unknown">Unknown error copying avatar</string>
     <string name="avatar_set_successfully">Avatar set successfully</string>
     <string name="error_launching_picker">Failed to launch image picker</string>
+    <string name="processing_avatar">Processing avatar…</string> <!-- <<< NEW >>> -->
 
     <!-- Select Contacts Activity -->
     <string name="select_contacts_activity_label">Select contacts</string>
-    <string name="select_contacts_done">Done</string>
+    <!-- <string name="select_contacts_done">Done</string> --> <!-- Removed, use "ok" or specific FAB description -->
     <string name="permission_needed_select">Access to contacts is required to select contacts.</string>
     <string name="permission_denied_select">Permission to access contacts denied.</string>
-    <string name="error_permission_needed_select_toast">Permission is required to select contacts.</string>
+    <string name="error_permission_needed_select_toast">Permission is required to select contacts.</string> <!-- Used in code? Check -->
     <string name="no_contacts_found">No contacts with phone numbers found.</string>
     <string name="error_loading_contacts">Error loading contacts.</string>
     <string name="grant_permission_button">Grant permission</string>
@@ -114,9 +116,9 @@
 
 
     <!-- Call Confirm Activity -->
-    <string name="call_confirm_title">Call?</string>
-    <string name="call_confirm_call_button">Call</string>
-    <string name="call_confirm_cancel_button">Cancel</string>
+    <string name="call_confirm_title">Call?</string> <!-- Dialog title, not currently used -->
+    <string name="call_confirm_call_button">Call</string> <!-- Button text/contentDescription -->
+    <string name="call_confirm_cancel_button">Cancel</string> <!-- Button text/contentDescription -->
     <string name="unknown_contact">Unknown</string>
     <string name="error_phone_number_missing">Error: Phone number not found.</string>
     <string name="error_no_call_app">No application found to make a call.</string>
@@ -127,8 +129,8 @@
     <string name="error_opening_dialer">Failed to open dialer</string>
     <!-- Call Stats -->
     <string name="last_call_label">Last call:</string>
-    <string name="call_count_label">Calls:</string>
-    <string name="total_duration_label">Duration:</string>
+    <!-- <string name="call_count_label">Calls:</string> --> <!-- Removed, use formatted string -->
+    <!-- <string name="total_duration_label">Duration:</string> --> <!-- Removed, use formatted string -->
     <string name="call_stats_not_available">Stats unavailable</string>
     <string name="call_stats_permission_needed">Call log permission needed</string>
     <!-- Formatting Strings for Stats -->
@@ -140,21 +142,29 @@
     <string name="permission_needed_title">Permission Required</string>
     <string name="grant_permission">Grant</string>
     <string name="continue_without_permission">Continue without permission</string>
-    <string name="permission_needed">Permission required</string>
+    <string name="permission_needed">Permission required</string> <!-- Generic -->
     <string name="permission_call_needed_for_call_options">Permission to make calls is required for "Call" and "Confirm Call" options.</string>
-    <string name="permission_call_log_needed_favorites_recents">Access to the call log is required to display recent calls in the widget.</string>
-    <string name="warning_recents_unavailable">Warning: Recent calls will not be displayed without permission.</string>
+    <string name="permission_call_log_needed_favorites_recents">Access to the call log is required to display recent and frequent calls in the widget.</string>
+    <string name="warning_recents_unavailable">Warning: Recent/Frequent calls will not be displayed without permission.</string>
     <string name="call_permission_revoked">Call permission was revoked. Opening number in dialer.</string>
     <string name="permission_contacts_rationale">Contacts permission is needed to display them in the widget and select favorites.</string>
     <string name="permission_storage_needed_for_avatar">Permission to access images is required to select a custom avatar.</string>
+    <string name="permissions_needed_for_save">Required permissions are needed to save this configuration.</string>
+    <!-- Permission Names (for missing list) -->
+    <string name="permission_contacts_name">Contacts</string>
+    <string name="permission_call_log_name">Call Log</string>
+    <string name="permission_call_phone_name">Phone Calls</string>
+    <string name="permission_storage_images_name">Images</string>
+    <string name="permissions_missing_toast">Missing permissions: %s. Please grant them to save.</string>
+
 
     <!-- MIUI Dialog -->
-    <string name="miui_dialog_title">Additional Permissions</string>
-    <string name="miui_dialog_message">On Xiaomi (MIUI) devices...</string> <!-- Shortened for brevity, full text in DeviceUtils -->
+    <string name="miui_dialog_title">Additional Permissions (MIUI)</string>
+    <string name="miui_dialog_message">On Xiaomi (MIUI) devices, for the widget to work correctly (especially calling on click and displaying pop-ups), you might need to manually enable permissions in \'Other permissions\':\n\n• Display pop-up windows\n• Home screen shortcuts</string>
     <string name="miui_dialog_settings_button">Go to settings</string>
     <string name="miui_dialog_acknowledge_button">Got it / Later</string>
     <string name="miui_dialog_cant_open_settings">Failed to open settings. Please do it manually.</string>
-    <string name="miui_dialog_check_permissions_later">Check \'Other permissions\' in app settings...</string>
+    <string name="miui_dialog_check_permissions_later">Remember to check \'Other permissions\' in app settings.</string>
 
     <!-- Common Strings -->
     <string name="unknown">Unknown</string>
@@ -164,10 +174,12 @@
     <string name="settings_export_summary">Save settings for all widgets to a file (ZIP)</string>
     <string name="settings_import_title">Import settings</string>
     <string name="settings_import_summary">Load settings for widgets from a file (ZIP)</string>
-    <string name="backup_successful">Settings exported</string>
+    <string name="backup_successful">Settings exported successfully</string>
     <string name="backup_failed">Export failed: %s</string>
-    <string name="restore_successful">Settings imported</string>
+    <string name="restore_successful">Settings imported successfully</string>
     <string name="restore_failed">Import failed: %s</string>
+    <string name="backup_started">Starting backup…</string>
+    <string name="restore_started">Starting restore…</string>
     <string name="no_widgets_to_backup">No active widgets to export</string>
     <string name="no_widgets_to_restore">No active widgets to import settings for</string>
     <string name="error_reading_file">Error reading file: %s</string>
@@ -175,5 +187,8 @@
     <string name="error_parsing_backup">Error parsing backup file: %s</string>
     <string name="error_reading_zip">Error reading ZIP archive: %s</string>
     <string name="settings_reloading">Reloading settings…</string>
+    <string name="error_opening_confirmation">Failed to open confirmation dialog</string>
+    <string name="error_opening_input_stream">Failed to open input stream</string>
+
 
 </resources>

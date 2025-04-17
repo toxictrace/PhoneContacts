@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Корневой ConstraintLayout -->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -16,14 +15,14 @@
         android:layout_height="120dp"
         android:importantForAccessibility="no"
         android:padding="2dp"
-        android:scaleType="centerCrop"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium"
-        app:strokeColor="#4DFFFFFF"
-        app:strokeWidth="1dp"
-        tools:src="@drawable/ic_contact_placeholder" />
+    android:scaleType="centerCrop"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium"
+    app:strokeColor="#4DFFFFFF"
+    app:strokeWidth="1dp"
+    tools:src="@drawable/ic_contact_placeholder" />
 
     <!-- Имя контакта -->
     <TextView
@@ -34,13 +33,13 @@
         android:gravity="center_horizontal"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:textColor="@android:color/white"
-        android:maxLines="2"
-        android:ellipsize="end"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/contact_photo"
-        tools:text="Очень Длинное Имя Контакта Для Теста Переноса Строки" />
+        android:textColor="@color/white"
+    android:maxLines="2"
+    android:ellipsize="end"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/contact_photo"
+    tools:text="Очень Длинное Имя Контакта Для Теста Переноса Строки" />
 
     <!-- Номер телефона -->
     <TextView
@@ -50,10 +49,10 @@
         android:layout_marginTop="8dp"
         android:textSize="16sp"
         android:textColor="#E0E0E0"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/contact_name"
-        tools:text="+375295966065" />
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/contact_name"
+    tools:text="+375295966065" />
 
     <!-- ==================== БЛОК СТАТИСТИКИ ==================== -->
     <LinearLayout
@@ -63,102 +62,105 @@
         android:orientation="vertical"
         android:layout_marginTop="16dp"
         android:visibility="gone"
-        tools:visibility="visible"
-        android:gravity="center_horizontal"
-        app:layout_constraintTop_toBottomOf="@id/phone_number"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+    tools:visibility="visible"
+    android:gravity="center_horizontal"
+    app:layout_constraintTop_toBottomOf="@id/phone_number"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent">
 
-        <TextView
-            android:id="@+id/label_last_call"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/last_call_label"
-            android:textSize="12sp"
-            android:textColor="#B0B0B0" />
-
-        <TextView
-            android:id="@+id/text_last_call_datetime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:textSize="12sp"
-            android:textColor="#D0D0D0"
-            tools:text="6 апр. 2025 г. 17:55:01"/>
-
-        <TextView
-            android:id="@+id/text_call_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:textSize="12sp"
-            android:textColor="#D0D0D0"
-            tools:text="Звонков: 2504"/>
-
-        <TextView
-            android:id="@+id/text_total_duration"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textSize="12sp"
-            android:textColor="#D0D0D0"
-            tools:text="Длительность: 2:05:10:20"/>
-    </LinearLayout>
-
-    <ProgressBar
-        android:id="@+id/stats_progress_bar"
-        style="?android:attr/progressBarStyleSmall"
+    <TextView
+        android:id="@+id/label_last_call"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:visibility="gone"
-        tools:visibility="visible"
-        app:layout_constraintTop_toBottomOf="@id/phone_number"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        android:text="@string/last_call_label"
+        android:textSize="12sp"
+        android:textColor="#B0B0B0" />
+
+    <TextView
+        android:id="@+id/text_last_call_datetime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:textSize="12sp"
+        android:textColor="#D0D0D0"
+    tools:text="6 апр. 2025 г. 17:55"/>
+
+    <TextView
+        android:id="@+id/text_call_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textSize="12sp"
+        android:textColor="#D0D0D0"
+        tools:text="@string/call_count_label_with_value"/>
+
+    <TextView
+        android:id="@+id/text_total_duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textSize="12sp"
+        android:textColor="#D0D0D0"
+        tools:text="@string/total_duration_label_with_value"/>
+</LinearLayout>
+
+<ProgressBar
+android:id="@+id/stats_progress_bar"
+style="?android:attr/progressBarStyleSmall"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:layout_marginTop="16dp"
+android:importantForAccessibility="no"
+    android:visibility="gone"
+    tools:visibility="visible"
+    app:layout_constraintTop_toBottomOf="@id/phone_number"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"/>
     <!-- ============================================================== -->
 
-    <!-- Кнопка Отмена -->
-    <ImageButton
-        android:id="@+id/button_cancel"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/oval_background_red"
-        android:contentDescription="@string/cancel"
-        android:elevation="4dp"
-        android:src="@drawable/ic_close_24"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guideline_center"
-        app:layout_constraintTop_toBottomOf="@+id/stats_container"
-        app:layout_constraintVertical_bias="0.0"
-        app:tint="@color/white" />
+    <!-- Guideline для разделения кнопок -->
+<androidx.constraintlayout.widget.Guideline
+android:id="@+id/guideline_center"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:importantForAccessibility="no"
+    android:orientation="vertical"
+    app:layout_constraintGuide_percent="0.5" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5" />
+    <!-- Кнопка Отмена -->
+<ImageButton
+android:id="@+id/button_cancel"
+android:layout_width="64dp"
+android:layout_height="64dp"
+android:layout_marginTop="24dp"
+android:layout_marginEnd="32dp"
+android:layout_marginBottom="8dp"
+android:background="@drawable/oval_background_red"
+android:contentDescription="@string/cancel"
+    android:elevation="4dp"
+    android:src="@drawable/ic_close_24"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toStartOf="@+id/guideline_center"
+    app:layout_constraintTop_toBottomOf="@+id/stats_container"
+    app:layout_constraintVertical_bias="0.0"
+    app:tint="@color/white" />
 
     <!-- Кнопка Позвонить -->
-    <ImageButton
-        android:id="@+id/button_call"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/oval_background_green"
-        android:contentDescription="@string/call_confirm_call_button"
-        android:elevation="4dp"
-        android:src="@drawable/ic_call_24"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline_center"
-        app:layout_constraintTop_toBottomOf="@+id/stats_container"
-        app:layout_constraintVertical_bias="0.0"
-        app:tint="@color/white" />
+<ImageButton
+android:id="@+id/button_call"
+android:layout_width="64dp"
+android:layout_height="64dp"
+android:layout_marginTop="24dp"
+android:layout_marginStart="32dp"
+android:layout_marginBottom="8dp"
+android:background="@drawable/oval_background_green"
+android:contentDescription="@string/call_confirm_call_button"
+    android:elevation="4dp"
+    android:src="@drawable/ic_call_24"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toStartOf="@+id/guideline_center"
+    app:layout_constraintTop_toBottomOf="@+id/stats_container"
+    app:layout_constraintVertical_bias="0.0"
+    app:tint="@color/white" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>

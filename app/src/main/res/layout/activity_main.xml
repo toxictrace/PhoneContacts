@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <!-- Текстовое поле для информации (добавить виджет / настроить) -->
     <TextView
         android:id="@+id/textViewInfo"
         android:layout_width="0dp"
@@ -14,25 +15,28 @@
         android:layout_marginEnd="32dp"
         android:gravity="center"
         android:text="@string/loading"
-    android:textAppearance="?attr/textAppearanceBody1"
-    app:layout_constraintBottom_toTopOf="@+id/buttonConfigure"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintVertical_chainStyle="packed" />
+        android:textAppearance="?attr/textAppearanceBody1"
+        app:layout_constraintBottom_toTopOf="@+id/buttonConfigure"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        tools:text="@string/info_add_widget"/> <!-- Пример текста для preview -->
 
+    <!-- Кнопка для перехода к настройкам первого виджета -->
     <Button
         android:id="@+id/buttonConfigure"
+        style="@style/Widget.Material3.Button.ElevatedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/button_configure"
-    android:visibility="gone"
+        android:visibility="gone"
+    android:contentDescription="@string/info_configure_widgets"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/textViewInfo"
-    tools:visibility="visible"/>
-
+    tools:visibility="visible"/> <!-- Показываем в preview -->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

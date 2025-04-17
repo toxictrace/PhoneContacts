@@ -7,7 +7,7 @@ import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri // <<< Убедитесь, что этот импорт есть >>>
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.CallLog
@@ -19,228 +19,84 @@ import androidx.core.content.ContextCompat
 
 class ContactsGridWidgetProvider : AppWidgetProvider() {
 
-    override fun onUpdate(
-        context: Context,
-        appWidgetManager: AppWidgetManager,
-        appWidgetIds: IntArray
-    ) {
-        Log.d("WidgetProvider", "onUpdate called for widgets: ${appWidgetIds.joinToString()}")
-        appWidgetIds.forEach { appWidgetId ->
-            updateAppWidget(context, appWidgetManager, appWidgetId)
-        }
-        super.onUpdate(context, appWidgetManager, appWidgetIds)
-    }
-
-    override fun onDeleted(context: Context, appWidgetIds: IntArray) {
-        Log.d("WidgetProvider", "onDeleted called for widgets: ${appWidgetIds.joinToString()}")
-        // Удаляем настройки и связанные файлы (включая кастомные аватары)
-        WidgetPrefsUtils.deleteWidgetConfig(context, appWidgetIds)
-        super.onDeleted(context, appWidgetIds)
-    }
-
-    override fun onReceive(context: Context, intent: Intent) {
-        Log.d("WidgetProvider", "onReceive triggered. Action: ${intent.action}")
-
-        when (intent.action) {
-            ACTION_CLICK_CONTACT -> {
-                Log.d("WidgetProvider", "Action is ACTION_CLICK_CONTACT")
-                // Извлекаем данные, переданные через fillInIntent из Factory
-                val phoneNumber = intent.getStringExtra(EXTRA_PHONE_NUMBER)
-                val contactName = intent.getStringExtra(EXTRA_CONTACT_NAME)
-                val photoUriString = intent.getStringExtra(EXTRA_PHOTO_URI) // URI миниатюры контакта
-                val contactId = intent.getLongExtra(EXTRA_CONTACT_ID, -1L)
-                // Получаем ID виджета из Intent'а-шаблона, который мы создали в updateAppWidget
-                val clickedWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
-
-                Log.d("WidgetProvider", "Extracted PN: $phoneNumber, Name: $contactName, PhotoUri: $photoUriString, ContactID: $contactId from widget $clickedWidgetId")
-
-                if (!phoneNumber.isNullOrEmpty() && clickedWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
-                    // Загружаем настройку действия по клику для данного виджета
-                    val clickAction = WidgetPrefsUtils.loadClickAction(context, clickedWidgetId)
-                    Log.d("WidgetProvider", "Click action preference for widget $clickedWidgetId: $clickAction")
-                    try {
-                        when (clickAction) {
-                            WidgetPrefsUtils.CLICK_ACTION_CALL -> {
-                                // Действие: Немедленный звонок
-                                Log.d("WidgetProvider", "Attempting direct call (ACTION_CALL)")
-                                if (ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
-                                    val callIntent = Intent(Intent.ACTION_CALL).apply {
-                                        // <<< ИЗМЕНЕНИЕ: Используем Uri.fromParts для корректной обработки '#' >>>
-                                        data = Uri.fromParts("tel", phoneNumber, null)
-                                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) // Важно для запуска из BroadcastReceiver
-                                    }
-                                    if (callIntent.resolveActivity(context.packageManager) != null) {
-                                        context.startActivity(callIntent)
-                                        Log.d("WidgetProvider", "ACTION_CALL started.")
-                                    } else {
-                                        handleNoActivityFound(context, "ACTION_CALL")
-                                    }
-                                } else {
-                                    // Если разрешение отозвано, fallback на открытие звонилки
-                                    Log.w("WidgetProvider", "CALL_PHONE permission missing. Falling back to ACTION_DIAL.")
-                                    Toast.makeText(context, R.string.call_permission_revoked, Toast.LENGTH_LONG).show()
-                                    startDialActivity(context, phoneNumber)
-                                }
-                            }
-                            WidgetPrefsUtils.CLICK_ACTION_CONFIRM_CALL -> {
-                                // Действие: Показать диалог подтверждения
-                                Log.d("WidgetProvider", "Starting CallConfirmActivity...")
-                                val confirmIntent = Intent(context, CallConfirmActivity::class.java).apply {
-                                    putExtra(EXTRA_PHONE_NUMBER, phoneNumber)
-                                    putExtra(EXTRA_CONTACT_NAME, contactName)
-                                    putExtra(EXTRA_PHOTO_URI, photoUriString) // Передаем URI миниатюры
-                                    putExtra(EXTRA_CONTACT_ID, contactId) // Передаем ID контакта
-                                    putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, clickedWidgetId) // Передаем ID виджета!
-                                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                }
-                                if (confirmIntent.resolveActivity(context.packageManager) != null) {
-                                    context.startActivity(confirmIntent)
-                                    Log.d("WidgetProvider", "CallConfirmActivity started.")
-                                } else {
-                                    handleNoActivityFound(context, "CallConfirmActivity")
-                                }
-                            }
-                            else -> { // WidgetPrefsUtils.CLICK_ACTION_DIAL или неизвестное значение
-                                // Действие по умолчанию: Открыть номер в звонилке
-                                Log.d("WidgetProvider", "Defaulting to dialer action (ACTION_DIAL)")
-                                startDialActivity(context, phoneNumber)
-                            }
-                        }
-                    } catch (e: SecurityException) {
-                        // Обработка SecurityException (например, при попытке ACTION_CALL без разрешения)
-                        Log.e("WidgetProvider", "SecurityException during click action: ${e.message}", e)
-                        Toast.makeText(context, R.string.permission_call_needed_for_call_options, Toast.LENGTH_LONG).show()
-                        startDialActivity(context, phoneNumber) // Fallback на звонилку
-                    } catch (e: Exception) {
-                        // Обработка других ошибок
-                        Log.e("WidgetProvider", "Error processing click: ${e.message}", e)
-                        Toast.makeText(context, R.string.error_processing_click, Toast.LENGTH_SHORT).show() // Используем строку из ресурсов
-                    }
-                } else {
-                    // Обработка случая, когда номер телефона пуст или ID виджета невалидный
-                    handleMissingData(phoneNumber, clickedWidgetId, contactId)
-                }
-            }
-            ACTION_REFRESH_WIDGET -> {
-                // Обработка нажатия кнопки "Обновить"
-                val widgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
-                if (widgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
-                    Log.d("WidgetProvider", "Refresh action received for widget $widgetId")
-                    val appWidgetManager = AppWidgetManager.getInstance(context)
-                    // Уведомляем систему, что данные для GridView изменились (запустит onDataSetChanged в Factory)
-                    appWidgetManager.notifyAppWidgetViewDataChanged(widgetId, R.id.widget_grid_view)
-                    Toast.makeText(context, R.string.widget_refreshing, Toast.LENGTH_SHORT).show()
-                } else {
-                    Log.w("WidgetProvider", "Refresh action received with invalid widget ID.")
-                }
-            }
-            else -> {
-                // Передаем обработку другим действиям (например, APPWIDGET_UPDATE) родительскому классу
-                super.onReceive(context, intent)
-            }
-        }
-    }
-
-    // Вспомогательная функция для запуска стандартной звонилки (ACTION_DIAL)
-    private fun startDialActivity(context: Context, phoneNumber: String) {
-        try {
-            val dialIntent = Intent(Intent.ACTION_DIAL).apply {
-                // <<< ИЗМЕНЕНИЕ: Используем Uri.fromParts для корректной обработки '#' >>>
-                data = Uri.fromParts("tel", phoneNumber, null)
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            }
-            if (dialIntent.resolveActivity(context.packageManager) != null) {
-                context.startActivity(dialIntent)
-                Log.d("WidgetProvider", "ACTION_DIAL started.")
-            } else {
-                handleNoActivityFound(context, "ACTION_DIAL")
-            }
-        } catch (e: Exception) {
-            Log.e("WidgetProvider", "Error starting ACTION_DIAL: ${e.message}", e)
-            Toast.makeText(context, R.string.error_opening_dialer, Toast.LENGTH_SHORT).show() // Используем строку из ресурсов
-        }
-    }
-
-    // Вспомогательная функция для обработки отсутствия Activity
-    private fun handleNoActivityFound(context: Context, action: String) {
-        Log.w("WidgetProvider", "No activity found to handle $action")
-        Toast.makeText(context, R.string.error_action_app_not_found, Toast.LENGTH_SHORT).show() // Используем строку из ресурсов
-    }
-
-    // Вспомогательная функция для логирования отсутствующих данных
-    private fun handleMissingData(phoneNumber: String?, widgetId: Int, contactId: Long) {
-        if (phoneNumber.isNullOrEmpty()) {
-            Log.w("WidgetProvider", "ACTION_CLICK_CONTACT ignored: Missing phone number! (WidgetID: $widgetId, ContactID: $contactId)")
-        }
-        if (widgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
-            Log.w("WidgetProvider", "ACTION_CLICK_CONTACT ignored: Invalid widget ID! (PhoneNumber: $phoneNumber, ContactID: $contactId)")
-        }
-        // Можно добавить Toast для пользователя, если необходимо
-        // Toast.makeText(context, "Ошибка: Недостаточно данных для обработки нажатия", Toast.LENGTH_SHORT).show()
-    }
-
+    // TAG для логов
+    // <<< ИЗМЕНЕНИЕ: Убираем private >>>
     companion object {
+        const val TAG = "WidgetProvider"
+        // Действия для Intent'ов
         const val ACTION_CLICK_CONTACT = "by.toxic.phonecontacts.ACTION_CLICK_CONTACT"
         const val ACTION_REFRESH_WIDGET = "by.toxic.phonecontacts.ACTION_REFRESH_WIDGET"
-        // Константы для передачи данных в Intent
+        // Ключи для передачи данных в Intent
         const val EXTRA_PHONE_NUMBER = "by.toxic.phonecontacts.EXTRA_PHONE_NUMBER"
         const val EXTRA_CONTACT_NAME = "by.toxic.phonecontacts.EXTRA_CONTACT_NAME"
-        const val EXTRA_PHOTO_URI = "by.toxic.phonecontacts.EXTRA_PHOTO_URI" // URI миниатюры контакта
+        const val EXTRA_PHOTO_URI = "by.toxic.phonecontacts.EXTRA_PHOTO_URI" // URI миниатюры
         const val EXTRA_CONTACT_ID = "by.toxic.phonecontacts.EXTRA_CONTACT_ID" // ID контакта
 
-        // Статический метод для обновления конкретного виджета (вызывается из конфигурации и onUpdate)
+        /**
+         * Обновляет внешний вид и данные конкретного экземпляра виджета.
+         * Вызывается из onUpdate, а также из WidgetConfigureActivity после сохранения настроек.
+         * <<< ИЗМЕНЕНИЕ: Делаем public или internal, если нужен доступ из других модулей >>>
+         * internal - доступен внутри модуля app
+         */
         internal fun updateAppWidget(
             context: Context,
             appWidgetManager: AppWidgetManager,
             appWidgetId: Int
         ) {
-            Log.d("WidgetProvider", "[static] Updating widget $appWidgetId...")
+            Log.d(TAG, "[static] Обновление widget $appWidgetId...")
+            // Используем applicationContext для PendingIntent'ов
+            val appContext = context.applicationContext
 
-            // Загружаем количество колонок из настроек
-            val columnCount = WidgetPrefsUtils.loadColumnCount(context, appWidgetId)
-            // Выбираем layout в зависимости от количества колонок
+            // 1. Загружаем количество колонок и выбираем соответствующий макет
+            val columnCount = WidgetPrefsUtils.loadColumnCount(appContext, appWidgetId)
             val layoutId = when (columnCount) {
                 3 -> R.layout.widget_layout_3_cols
                 4 -> R.layout.widget_layout_4_cols
                 5 -> R.layout.widget_layout_5_cols
                 6 -> R.layout.widget_layout_6_cols
-                else -> R.layout.widget_layout_default // По умолчанию 4 колонки
+                else -> { // По умолчанию или если значение некорректно
+                    Log.w(TAG, "[static] Неверное количество колонок ($columnCount) для widget $appWidgetId. Используется макет по умолчанию.")
+                    R.layout.widget_layout_default
+                }
             }
-            Log.d("WidgetProvider", "[static] Widget $appWidgetId - Using layout ID: $layoutId for $columnCount columns")
+            Log.d(TAG, "[static] Widget $appWidgetId - Используется макет ID: $layoutId для $columnCount колонок")
 
-            // Создаем RemoteViews для виджета
-            val views = RemoteViews(context.packageName, layoutId)
+            // 2. Создаем RemoteViews для виджета
+            val views = RemoteViews(appContext.packageName, layoutId)
 
-            // Настраиваем адаптер для GridView
-            val serviceIntent = Intent(context, ContactsGridWidgetService::class.java).apply {
+            // 3. Настраиваем адаптер для GridView через RemoteViewsService
+            val serviceIntent = Intent(appContext, ContactsGridWidgetService::class.java).apply {
                 // Передаем ID виджета в Service, чтобы Factory знал, для какого виджета работать
                 putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-                // Установка уникального data URI предотвращает кэширование Intent разными виджетами
+                // Установка уникального data URI предотвращает кэширование Intent'а системой
+                // для разных виджетов, использующих один и тот же Service.
                 data = Uri.parse(this.toUri(Intent.URI_INTENT_SCHEME))
             }
             views.setRemoteAdapter(R.id.widget_grid_view, serviceIntent)
 
-            // Устанавливаем View для пустого состояния GridView
-            views.setEmptyView(R.id.widget_grid_view, R.id.widget_empty_view)
+            // 4. Устанавливаем View для пустого состояния GridView
+            views.setEmptyView(R.id.widget_grid_view, R.id.widget_empty_view) // ID из макетов widget_layout_*.xml
 
-            // Создаем шаблон PendingIntent для обработки кликов по элементам GridView
-            val clickIntentTemplate = Intent(context, ContactsGridWidgetProvider::class.java).apply {
+            // 5. Создаем шаблон PendingIntent для обработки кликов по элементам GridView
+            val clickIntentTemplate = Intent(appContext, ContactsGridWidgetProvider::class.java).apply {
                 action = ACTION_CLICK_CONTACT
                 // ВАЖНО: Добавляем ID виджета в шаблон. Этот ID будет добавлен к fillInIntent
-                // для каждого элемента GridView и доступен в onReceive.
+                // для каждого элемента GridView и доступен в onReceive провайдера.
                 putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-                data = Uri.parse("widget_click://$appWidgetId") // Уникальный data для интента шаблона
+                // Уникальный data для интента-шаблона, чтобы система различала шаблоны для разных виджетов
+                data = Uri.parse("widget_click://$appWidgetId/${System.currentTimeMillis()}") // Добавляем время для уникальности
             }
-            // Устанавливаем флаги для PendingIntent
+            // Определяем флаги для PendingIntent в зависимости от версии Android
             val flagsTemplate = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE // MUTABLE нужен для fillInIntent
+                // MUTABLE нужен, так как система будет добавлять fillInIntent
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
             } else {
                 PendingIntent.FLAG_UPDATE_CURRENT
             }
-            // Создаем PendingIntent-шаблон
+            // Создаем PendingIntent-шаблон (тип Broadcast)
             val clickPendingIntentTemplate = PendingIntent.getBroadcast(
-                context,
-                appWidgetId, // Используем ID виджета как requestCode для уникальности
+                appContext,
+                appWidgetId, // Используем ID виджета как requestCode для уникальности PendingIntent'а
                 clickIntentTemplate,
                 flagsTemplate
             )
@@ -248,61 +104,274 @@ class ContactsGridWidgetProvider : AppWidgetProvider() {
             views.setPendingIntentTemplate(R.id.widget_grid_view, clickPendingIntentTemplate)
 
 
-            // Настройка видимости и обработчиков для кнопок "Звонилка" и "Обновить"
-            val showDialer = WidgetPrefsUtils.loadShowDialerButton(context, appWidgetId)
-            val showRefresh = WidgetPrefsUtils.loadShowRefreshButton(context, appWidgetId)
-            Log.d("WidgetProvider", "[static] Widget $appWidgetId - ShowDialer=$showDialer, ShowRefresh=$showRefresh")
+            // 6. Настройка видимости и обработчиков для кнопок "Звонилка" и "Обновить"
+            val showDialer = WidgetPrefsUtils.loadShowDialerButton(appContext, appWidgetId)
+            val showRefresh = WidgetPrefsUtils.loadShowRefreshButton(appContext, appWidgetId)
+            Log.d(TAG, "[static] Widget $appWidgetId - ShowDialer=$showDialer, ShowRefresh=$showRefresh")
 
-            // Кнопка "Звонилка"
+            // Кнопка "Звонилка" (открывает журнал вызовов)
             views.setViewVisibility(R.id.widget_button_dialer, if (showDialer) View.VISIBLE else View.GONE)
             if (showDialer) {
                 val dialerIntent = Intent(Intent.ACTION_VIEW, CallLog.Calls.CONTENT_URI).apply {
-                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) // Флаг для запуска из виджета
                 }
-                // Используем уникальный requestCode для этого PendingIntent
-                val dialerRequestCode = -appWidgetId - 1 // Пример уникального кода
+                // Уникальный requestCode для этого PendingIntent (отрицательный, чтобы не пересекаться с requestCode для clickIntentTemplate)
+                val dialerRequestCode = appWidgetId * -1 - 1
                 val flagsDialer = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
                 } else {
                     PendingIntent.FLAG_UPDATE_CURRENT
                 }
-                val dialerPendingIntent = PendingIntent.getActivity(context, dialerRequestCode, dialerIntent, flagsDialer)
+                val dialerPendingIntent = PendingIntent.getActivity(appContext, dialerRequestCode, dialerIntent, flagsDialer)
                 views.setOnClickPendingIntent(R.id.widget_button_dialer, dialerPendingIntent)
-                Log.d("WidgetProvider", "[static] Dialer button setup for widget $appWidgetId")
+                Log.d(TAG, "[static] Кнопка звонилки настроена для widget $appWidgetId")
             }
 
             // Кнопка "Обновить"
             views.setViewVisibility(R.id.widget_button_refresh, if (showRefresh) View.VISIBLE else View.GONE)
             if (showRefresh) {
-                val refreshIntent = Intent(context, ContactsGridWidgetProvider::class.java).apply {
+                val refreshIntent = Intent(appContext, ContactsGridWidgetProvider::class.java).apply {
                     action = ACTION_REFRESH_WIDGET
                     putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-                    data = Uri.parse("widget_refresh://$appWidgetId") // Уникальный data URI
+                    data = Uri.parse("widget_refresh://$appWidgetId/${System.currentTimeMillis()}") // Уникальный data URI
                 }
-                // Используем другой уникальный requestCode
-                val refreshRequestCode = appWidgetId + 1
+                // Другой уникальный requestCode (положительный, но отличный от appWidgetId)
+                val refreshRequestCode = appWidgetId + 1000 // Простое смещение для уникальности
                 val flagsRefresh = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE // Может быть IMMUTABLE, т.к. данные уже в Intent'е
                 } else {
                     PendingIntent.FLAG_UPDATE_CURRENT
                 }
-                val refreshPendingIntent = PendingIntent.getBroadcast(context, refreshRequestCode, refreshIntent, flagsRefresh)
+                val refreshPendingIntent = PendingIntent.getBroadcast(appContext, refreshRequestCode, refreshIntent, flagsRefresh)
                 views.setOnClickPendingIntent(R.id.widget_button_refresh, refreshPendingIntent)
-                Log.d("WidgetProvider", "[static] Refresh button setup for widget $appWidgetId")
+                Log.d(TAG, "[static] Кнопка обновления настроена для widget $appWidgetId")
             }
 
 
-            // Обновляем виджет с помощью AppWidgetManager
+            // 7. Обновляем виджет с помощью AppWidgetManager
             try {
-                // Сначала обновляем сам виджет
+                // Сначала обновляем сам виджет (макет, кнопки)
                 appWidgetManager.updateAppWidget(appWidgetId, views)
-                // Затем уведомляем об изменении данных в GridView (если это необходимо после updateAppWidget)
-                // Это может быть избыточно, но иногда помогает обновить коллекцию
+                // Затем уведомляем об изменении данных в GridView (это запустит onDataSetChanged в Factory)
+                // Это может быть избыточно сразу после updateAppWidget, но гарантирует обновление коллекции.
+                // Система может объединить эти вызовы.
                 appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widget_grid_view)
-                Log.d("WidgetProvider", "[static] Widget $appWidgetId update commands sent.")
+                Log.d(TAG, "[static] Команды updateAppWidget и notifyAppWidgetViewDataChanged отправлены для widget $appWidgetId.")
             } catch (e: Exception) {
-                Log.e("WidgetProvider", "[static] Error updating widget $appWidgetId: ${e.message}", e)
+                Log.e(TAG, "[static] Ошибка при обновлении widget $appWidgetId: ${e.message}", e)
+                // Здесь можно попробовать восстановить предыдущее состояние или показать ошибку
+            }
+        }
+    } // <<< Закрывающая скобка для companion object
+
+    // --- Lifecycle Methods ---
+
+    override fun onUpdate(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetIds: IntArray
+    ) {
+        Log.d(TAG, "onUpdate вызван для виджетов: ${appWidgetIds.joinToString()}")
+        // Обновляем каждый виджет, для которого пришло событие
+        appWidgetIds.forEach { appWidgetId ->
+            updateAppWidget(context, appWidgetManager, appWidgetId)
+        }
+        super.onUpdate(context, appWidgetManager, appWidgetIds)
+    }
+
+    override fun onDeleted(context: Context, appWidgetIds: IntArray) {
+        Log.d(TAG, "onDeleted вызван для виджетов: ${appWidgetIds.joinToString()}")
+        // Удаляем настройки и связанные файлы (включая кастомные аватары) для удаленных виджетов
+        WidgetPrefsUtils.deleteWidgetConfig(context, appWidgetIds)
+        super.onDeleted(context, appWidgetIds)
+    }
+
+    // --- Event Handling ---
+
+    override fun onReceive(context: Context, intent: Intent) {
+        val action = intent.action ?: "null" // Безопасное получение действия
+        Log.d(TAG, "onReceive получено действие: $action")
+
+        // Используем when для обработки известных действий
+        when (action) {
+            ACTION_CLICK_CONTACT -> handleClickAction(context, intent)
+            ACTION_REFRESH_WIDGET -> handleRefreshAction(context, intent)
+            // Для всех остальных действий (например, стандартных AppWidgetManager.ACTION_*)
+            // вызываем реализацию родительского класса
+            else -> {
+                Log.v(TAG, "Действие '$action' передано в super.onReceive")
+                try {
+                    super.onReceive(context, intent)
+                } catch (e: Exception) {
+                    Log.e(TAG, "Исключение в super.onReceive для действия '$action'", e)
+                }
             }
         }
     }
-}
+
+
+    // Обрабатывает клик по контакту в виджете
+    private fun handleClickAction(context: Context, intent: Intent) {
+        Log.d(TAG, "Обработка действия: ACTION_CLICK_CONTACT")
+
+        // Извлекаем данные, переданные через fillInIntent из Factory
+        val phoneNumber = intent.getStringExtra(EXTRA_PHONE_NUMBER)
+        val contactName = intent.getStringExtra(EXTRA_CONTACT_NAME)
+        val photoUriString = intent.getStringExtra(EXTRA_PHOTO_URI)
+        val contactId = intent.getLongExtra(EXTRA_CONTACT_ID, -1L)
+        // Получаем ID виджета из Intent'а-шаблона
+        val clickedWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
+
+        Log.d(TAG, "Извлечены данные: PN=$phoneNumber, Name=$contactName, PhotoUri=$photoUriString, ContactID=$contactId, WidgetID=$clickedWidgetId")
+
+        // Проверяем наличие номера и ID виджета
+        if (phoneNumber.isNullOrEmpty() || clickedWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
+            handleMissingData(context, phoneNumber, clickedWidgetId, contactId)
+            return // Прерываем обработку, если данных не хватает
+        }
+
+        // Загружаем настройку действия по клику для данного виджета
+        val clickAction = WidgetPrefsUtils.loadClickAction(context, clickedWidgetId)
+        Log.d(TAG, "Действие по клику для widget $clickedWidgetId: $clickAction")
+
+        try {
+            when (clickAction) {
+                WidgetPrefsUtils.CLICK_ACTION_CALL -> performDirectCall(context, phoneNumber)
+                WidgetPrefsUtils.CLICK_ACTION_CONFIRM_CALL -> startCallConfirmActivity(context, clickedWidgetId, phoneNumber, contactName, photoUriString, contactId)
+                // WidgetPrefsUtils.CLICK_ACTION_DIAL или любое неизвестное значение
+                else -> startDialActivity(context, phoneNumber)
+            }
+        } catch (e: SecurityException) {
+            // Обработка SecurityException (например, при попытке ACTION_CALL без разрешения)
+            Log.e(TAG, "SecurityException при выполнении действия по клику: ${e.message}", e)
+            Toast.makeText(context, R.string.permission_call_needed_for_call_options, Toast.LENGTH_LONG).show()
+            startDialActivity(context, phoneNumber) // Fallback на звонилку
+        } catch (e: Exception) {
+            // Обработка других ошибок
+            Log.e(TAG, "Ошибка обработки клика: ${e.message}", e)
+            Toast.makeText(context, R.string.error_processing_click, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    // Обрабатывает клик по кнопке "Обновить"
+    private fun handleRefreshAction(context: Context, intent: Intent) {
+        val widgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID)
+        if (widgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
+            Log.d(TAG, "Получено действие ACTION_REFRESH_WIDGET для widget $widgetId")
+            val appWidgetManager = AppWidgetManager.getInstance(context)
+            // Уведомляем систему, что данные для GridView изменились
+            // Это запустит onDataSetChanged в ContactsGridRemoteViewsFactory
+            appWidgetManager.notifyAppWidgetViewDataChanged(widgetId, R.id.widget_grid_view)
+            Toast.makeText(context, R.string.widget_refreshing, Toast.LENGTH_SHORT).show()
+        } else {
+            Log.w(TAG, "Получено действие ACTION_REFRESH_WIDGET с невалидным widget ID.")
+        }
+    }
+
+
+    // --- Вспомогательные функции для действий ---
+
+    // Выполняет прямой звонок (ACTION_CALL)
+    private fun performDirectCall(context: Context, phoneNumber: String) {
+        Log.d(TAG, "Попытка прямого звонка (ACTION_CALL) на номер $phoneNumber")
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+            val callIntent = Intent(Intent.ACTION_CALL).apply {
+                data = Uri.fromParts("tel", phoneNumber, null)
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) // Важно для запуска из BroadcastReceiver
+            }
+            if (callIntent.resolveActivity(context.packageManager) != null) {
+                try {
+                    context.startActivity(callIntent)
+                    Log.d(TAG, "ACTION_CALL запущен.")
+                } catch (se: SecurityException) {
+                    Log.e(TAG, "SecurityException при запуске ACTION_CALL (неожиданно, т.к. разрешение проверено): ${se.message}")
+                    Toast.makeText(context, R.string.permission_call_needed_for_call_options, Toast.LENGTH_LONG).show()
+                    startDialActivity(context, phoneNumber)
+                } catch (e: Exception) {
+                    Log.e(TAG, "Exception при запуске ACTION_CALL: ${e.message}")
+                    Toast.makeText(context, R.string.error_call_failed, Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                handleNoActivityFound(context, "ACTION_CALL")
+            }
+        } else {
+            // Если разрешение отозвано после настройки виджета
+            Log.w(TAG, "Отсутствует разрешение CALL_PHONE. Переход к ACTION_DIAL.")
+            Toast.makeText(context, R.string.call_permission_revoked, Toast.LENGTH_LONG).show()
+            startDialActivity(context, phoneNumber) // Fallback на звонилку
+        }
+    }
+
+    // Запускает Activity подтверждения звонка
+    private fun startCallConfirmActivity(context: Context, widgetId: Int, phoneNumber: String?, contactName: String?, photoUriString: String?, contactId: Long) {
+        Log.d(TAG, "Запуск CallConfirmActivity...")
+        val confirmIntent = Intent(context, CallConfirmActivity::class.java).apply {
+            putExtra(EXTRA_PHONE_NUMBER, phoneNumber)
+            putExtra(EXTRA_CONTACT_NAME, contactName)
+            putExtra(EXTRA_PHOTO_URI, photoUriString)
+            putExtra(EXTRA_CONTACT_ID, contactId)
+            putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId) // Передаем ID виджета!
+            // Флаги для запуска новой задачи и очистки предыдущей (если она была того же типа)
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        if (confirmIntent.resolveActivity(context.packageManager) != null) {
+            try {
+                context.startActivity(confirmIntent)
+                Log.d(TAG, "CallConfirmActivity запущена.")
+            } catch (e: Exception) {
+                Log.e(TAG, "Exception при запуске CallConfirmActivity: ${e.message}")
+                Toast.makeText(context, R.string.error_opening_confirmation, Toast.LENGTH_SHORT).show() // <<< НУЖНА НОВАЯ СТРОКА
+            }
+        } else {
+            handleNoActivityFound(context, "CallConfirmActivity")
+        }
+    }
+
+    // Запускает стандартную звонилку (ACTION_DIAL)
+    private fun startDialActivity(context: Context, phoneNumber: String?) {
+        if (phoneNumber.isNullOrEmpty()) {
+            Log.w(TAG, "Невозможно открыть звонилку, номер пуст.")
+            Toast.makeText(context, R.string.error_phone_number_missing, Toast.LENGTH_SHORT).show()
+            return
+        }
+        Log.d(TAG, "Открытие звонилки (ACTION_DIAL) с номером $phoneNumber")
+        try {
+            val dialIntent = Intent(Intent.ACTION_DIAL).apply {
+                data = Uri.fromParts("tel", phoneNumber, null)
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+            if (dialIntent.resolveActivity(context.packageManager) != null) {
+                context.startActivity(dialIntent)
+                Log.d(TAG, "ACTION_DIAL запущен.")
+            } else {
+                handleNoActivityFound(context, "ACTION_DIAL")
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Ошибка запуска ACTION_DIAL: ${e.message}", e)
+            Toast.makeText(context, R.string.error_opening_dialer, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    // --- Обработка ошибок и отсутствия данных ---
+
+    // Обрабатывает ситуацию, когда не найдено Activity для Intent'а
+    private fun handleNoActivityFound(context: Context, actionDescription: String) {
+        Log.w(TAG, "Не найдено Activity для обработки действия '$actionDescription'")
+        Toast.makeText(context, R.string.error_action_app_not_found, Toast.LENGTH_SHORT).show()
+    }
+
+    // Обрабатывает ситуацию, когда не хватает данных для клика
+    private fun handleMissingData(context: Context, phoneNumber: String?, widgetId: Int, contactId: Long) {
+        var errorMessage = context.getString(R.string.error_processing_click) + ": " // <<< Используем ресурс
+        if (phoneNumber.isNullOrEmpty()) {
+            errorMessage += context.getString(R.string.error_phone_number_missing) + " " // <<< Используем ресурс
+            Log.w(TAG, "ACTION_CLICK_CONTACT проигнорирован: Отсутствует номер! (WidgetID: $widgetId, ContactID: $contactId)")
+        }
+        if (widgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
+            errorMessage += context.getString(R.string.error_widget_id_missing) + " " // <<< Используем ресурс
+            Log.w(TAG, "ACTION_CLICK_CONTACT проигнорирован: Неверный ID виджета! (PhoneNumber: $phoneNumber, ContactID: $contactId)")
+        }
+        Toast.makeText(context, errorMessage.trim(), Toast.LENGTH_LONG).show() // Показываем более детальную ошибку
+    }
+
+} // Конец класса ContactsGridWidgetProvider
