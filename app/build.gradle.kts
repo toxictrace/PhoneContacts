@@ -16,7 +16,7 @@ android {
         minSdk = 24 // Минимальная версия Android (Android 7.0)
         targetSdk = 34
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.01"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

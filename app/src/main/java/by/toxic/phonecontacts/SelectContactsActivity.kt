@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.net.Uri
+import android.os.Build // Добавлен импорт
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.util.Log
@@ -41,6 +42,10 @@ class SelectContactsActivity : AppCompatActivity(), ContactsInteractionListener 
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // >>> Устанавливаем тему ДО super.onCreate() <<<
+        setTheme(AppSettings.getSelectedThemeResId(this))
+        // >>> КОНЕЦ УСТАНОВКИ ТЕМЫ <<<
+
         super.onCreate(savedInstanceState)
         binding = ActivitySelectContactsBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -133,19 +138,16 @@ class SelectContactsActivity : AppCompatActivity(), ContactsInteractionListener 
         }
     }
 
-    // --- ИЗМЕНЕНО: Добавляем notifyItemChanged после submitList ---
     override fun moveContactUp(position: Int) {
         if (position > 0 && position < contactListItems.size) {
             Collections.swap(contactListItems, position, position - 1)
             contactsAdapter.submitList(contactListItems.toList()) {
-                // Уведомляем об изменении ДВУХ элементов для обновления кнопок
                 contactsAdapter.notifyItemChanged(position)
                 contactsAdapter.notifyItemChanged(position - 1)
             }
         }
     }
 
-    // --- ИЗМЕНЕНО: Добавляем notifyItemChanged после submitList ---
     override fun moveContactDown(position: Int) {
         if (position >= 0 && position < contactListItems.size - 1) {
             Collections.swap(contactListItems, position, position + 1)
@@ -169,25 +171,19 @@ class SelectContactsActivity : AppCompatActivity(), ContactsInteractionListener 
     }
     // --- Конец ContactsInteractionListener ---
 
-    // --- ИЗМЕНЕНА ЛОГИКА СОРТИРОВКИ ---
     private fun sortContacts(
         contacts: List<ContactItem>,
         initialSelectionUris: List<String>?
     ): MutableList<ContactItem> {
         return contacts.sortedWith(compareBy(
-            // Сначала те, кто НЕ выбран (isSelected = false)
             { !it.isSelected },
-            // Затем, если это первая загрузка, сортируем ВЫБРАННЫХ по initialSelectionUris
             { if (it.isSelected && initialSelectionUris != null) initialSelectionUris.indexOf(it.contentUri) else Int.MAX_VALUE },
-            // Если не первая загрузка, ВЫБРАННЫЕ остаются в своем порядке (их isSelected false, они уже наверху)
-            // Наконец, сортируем НЕВЫБРАННЫХ по имени
             { if (!it.isSelected) it.name ?: "" else null }
         )).toMutableList()
     }
 
 
     private fun returnSelectedContacts() {
-        // Берем отсортированный и отфильтрованный список URI
         val selectedUris = contactListItems.filter { it.isSelected }.mapNotNull { it.contentUri }
         Log.d("SelectContactsActivity", "Returning ${selectedUris.size} selected URIs in specific order.")
         val resultIntent = Intent(); resultIntent.putStringArrayListExtra(RESULT_SELECTED_URIS, ArrayList(selectedUris)); setResult(Activity.RESULT_OK, resultIntent); finish()
@@ -200,7 +196,6 @@ class SelectContactsActivity : AppCompatActivity(), ContactsInteractionListener 
         }
     }
 
-    // --- Функции состояния UI без изменений ---
     private fun showLoadingState() { binding.progressBarSelect.isVisible = true; binding.recyclerViewAllContacts.isVisible = false; binding.textPermissionSelect.isVisible = false; binding.buttonGrantPermissionSelect.isVisible = false; binding.textNoContactsSelect.isVisible = false; binding.fabDoneSelect.isEnabled = false }
     private fun showListState() { binding.progressBarSelect.isVisible = false; binding.recyclerViewAllContacts.isVisible = true; binding.textPermissionSelect.isVisible = false; binding.buttonGrantPermissionSelect.isVisible = false; binding.textNoContactsSelect.isVisible = false; binding.fabDoneSelect.isEnabled = true }
     private fun showPermissionState(message: String) { binding.progressBarSelect.isVisible = false; binding.recyclerViewAllContacts.isVisible = false; binding.textPermissionSelect.text = message; binding.textPermissionSelect.isVisible = true; binding.buttonGrantPermissionSelect.isVisible = true; binding.textNoContactsSelect.isVisible = false; binding.fabDoneSelect.isEnabled = false }

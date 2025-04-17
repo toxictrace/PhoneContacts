@@ -15,9 +15,8 @@
             android:id="@+id/toolbar_select"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="Выберите контакты"
-            app:navigationIcon="@drawable/ic_close_24" />
-        <!-- Добавим кнопку "Закрыть" -->
+            app:title="@string/select_contacts_activity_label"
+        app:navigationIcon="@drawable/ic_close_24" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -46,26 +45,26 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/permission_needed"
-            android:textAppearance="?attr/textAppearanceBody1"
-            android:visibility="gone"
-            android:gravity="center"
-            android:padding="16dp"/>
+            android:text="@string/permission_needed_select"
+        android:textAppearance="?attr/textAppearanceBody1"
+        android:visibility="gone"
+        android:gravity="center"
+        android:padding="16dp"/>
         <Button
             android:id="@+id/button_grant_permission_select"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="40dp"
-            android:text="@string/grant_permission"
-            android:visibility="gone"/>
+            android:text="@string/grant_permission_button"
+        android:visibility="gone"/>
         <TextView
             android:id="@+id/text_no_contacts_select"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/no_contacts_found"
-            android:visibility="gone"/>
+        android:visibility="gone"/>
 
     </FrameLayout>
 
@@ -75,7 +74,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        android:contentDescription="Готово"
-        app:srcCompat="@drawable/ic_done_24" /> <!-- Иконка "Готово" -->
+        android:contentDescription="@string/fab_description_done"
+    app:srcCompat="@drawable/ic_done_24" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

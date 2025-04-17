@@ -12,75 +12,76 @@
     android:gravity="center_vertical"
     android:background="?android:attr/selectableItemBackground">
 
-<ImageView
-android:id="@+id/contact_photo"
-android:layout_width="40dp"
-android:layout_height="40dp"
-android:layout_marginEnd="12dp"
-tools:src="@drawable/ic_contact_placeholder" />
+    <ImageView
+        android:id="@+id/contact_photo"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="12dp"
+        tools:src="@drawable/ic_contact_placeholder" />
 
-<LinearLayout
-android:layout_width="0dp"
-android:layout_height="wrap_content"
-android:layout_weight="1"
-android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
 
-<TextView
-    android:id="@+id/contact_name"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    tools:text="Contact Name"
-    android:textAppearance="?attr/textAppearanceListItem"
-    android:maxLines="1"
-    android:ellipsize="end"/>
+        <TextView
+            android:id="@+id/contact_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="Contact Name"
+            android:textAppearance="?attr/textAppearanceListItem"
+            android:maxLines="1"
+            android:ellipsize="end"/>
 
-<TextView
-    android:id="@+id/contact_number"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    tools:text="+123 456 7890"
-    android:textAppearance="?attr/textAppearanceListItemSecondary"
-    android:maxLines="1"
-    android:ellipsize="end"/>
-
-</LinearLayout>
-
-    <!-- Чекбокс -->
-<CheckBox
-android:id="@+id/contact_checkbox"
-android:layout_width="wrap_content"
-android:layout_height="wrap_content"
-android:layout_marginStart="8dp"
-android:clickable="false" />
-
-    <!-- Кнопки сортировки (справа) -->
-<LinearLayout
-android:id="@+id/sort_buttons_container"
-android:layout_width="wrap_content"
-android:layout_height="wrap_content"
-android:orientation="vertical"
-android:layout_marginStart="8dp"
-android:visibility="invisible"> <!-- По умолчанию скрыты -->
-
-<ImageButton
-    android:id="@+id/button_move_up"
-    android:layout_width="36dp"
-    android:layout_height="36dp"
-    android:background="?attr/selectableItemBackgroundBorderless"
-    android:src="@drawable/ic_arrow_upward_24"
-    android:scaleType="centerInside"
-    android:contentDescription="Move Up"
-    app:tint="?attr/colorControlNormal"/>
-
-<ImageButton
-    android:id="@+id/button_move_down"
-    android:layout_width="36dp"
-    android:layout_height="36dp"
-    android:background="?attr/selectableItemBackgroundBorderless"
-    android:src="@drawable/ic_arrow_downward_24"
-    android:scaleType="centerInside"
-    android:contentDescription="Move Down"
-    app:tint="?attr/colorControlNormal"/>
-</LinearLayout>
+        <TextView
+            android:id="@+id/contact_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="+123 456 7890"
+            android:textAppearance="?attr/textAppearanceListItemSecondary"
+            android:maxLines="1"
+            android:ellipsize="end"/>
 
     </LinearLayout>
+
+    <!-- Чекбокс -->
+    <CheckBox
+        android:id="@+id/contact_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:clickable="false" />
+
+    <!-- Кнопки сортировки (справа) -->
+    <LinearLayout
+        android:id="@+id/sort_buttons_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginStart="8dp"
+        android:visibility="invisible"
+        tools:visibility="visible"> <!-- По умолчанию скрыты, tools:visibility для preview -->
+
+        <ImageButton
+            android:id="@+id/button_move_up"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_arrow_upward_24"
+            android:scaleType="centerInside"
+            android:contentDescription="@string/content_desc_move_up"
+        app:tint="?attr/colorControlNormal"/>
+
+        <ImageButton
+            android:id="@+id/button_move_down"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_arrow_downward_24"
+            android:scaleType="centerInside"
+            android:contentDescription="@string/content_desc_move_down"
+        app:tint="?attr/colorControlNormal"/>
+    </LinearLayout>
+
+</LinearLayout>

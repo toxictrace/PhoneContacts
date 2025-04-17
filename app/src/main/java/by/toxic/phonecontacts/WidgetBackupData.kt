@@ -13,10 +13,13 @@ data class WidgetBackupData(
     val showUnknown: Boolean,
     val showDialerButton: Boolean,
     val showRefreshButton: Boolean,
-    val filterOldUnknown: Boolean
+    val filterOldUnknown: Boolean,
+    val compareDigitsCount: Int,
+    val unknownAvatarMode: String, // <<< ДОБАВЛЕНО
+    val unknownAvatarCustomUri: String? // <<< ДОБАВЛЕНО (nullable)
 )
 
 @Serializable
 data class AppBackup(
-    val widgetSettings: Map<Int, WidgetBackupData> // Map<WidgetId, Settings>
+    val widgetSettings: Map<Int, WidgetBackupData>
 )

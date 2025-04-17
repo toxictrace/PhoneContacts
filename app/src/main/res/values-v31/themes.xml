@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Переопределяем Динамическую тему для Android 12+ (API 31+) -->
+    <!-- Она будет использовать цвета Material You -->
+    <!-- Наследуется от Base, определенной в values/themes.xml -->
+    <style name="Theme.PhoneContacts.Dynamic" parent="Theme.PhoneContacts.Base">
+        <!-- НЕ задаем здесь colorPrimary, colorSecondary и т.д. -->
+        <!-- Система Android 12+ сама подставит динамические цвета -->
+        <!-- Наследуем все из Theme.PhoneContacts.Base (colorControlActivated и т.д.) -->
+    </style>
+
+    <!-- Статическую тему здесь переопределять НЕ нужно -->
+    <!-- Тему CallConfirmDialog здесь переопределять НЕ нужно -->
+    <!-- Базовую тему Theme.PhoneContacts.Base здесь переопределять НЕ нужно -->
+</resources>

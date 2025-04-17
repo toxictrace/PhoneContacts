@@ -5,12 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@android:color/transparent">
+    android:background="@android:color/transparent"> <!-- Используем прозрачный фон -->
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"> <!-- Занимает все доступное пространство над кнопками -->
 
         <GridView
             android:id="@+id/widget_grid_view"
@@ -23,6 +23,7 @@
             android:verticalSpacing="0dp"
             android:horizontalSpacing="0dp" />
 
+        <!-- View, показываемый когда GridView пуст -->
         <TextView
             android:id="@+id/widget_empty_view"
             android:layout_width="match_parent"
@@ -43,8 +44,9 @@
         android:layout_height="32dp"
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
-        > <!-- Убраны вертикальные паддинги -->
+        >
 
+        <!-- Кнопка "Звонилка" (в центре) -->
         <ImageButton
             android:id="@+id/widget_button_dialer"
             android:layout_width="24dp"
@@ -57,6 +59,7 @@
             tools:visibility="visible"
             android:contentDescription="@string/widget_content_desc_dialer"/>
 
+        <!-- Кнопка "Обновить" (справа) -->
         <ImageButton
             android:id="@+id/widget_button_refresh"
             android:layout_width="24dp"

@@ -8,7 +8,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import by.toxic.phonecontacts.databinding.ConfigureContactItemBinding // <<< Убедись, что этот import правильный
+import by.toxic.phonecontacts.databinding.ConfigureContactItemBinding
 import com.bumptech.glide.Glide
 import java.util.Collections
 
@@ -18,8 +18,8 @@ interface ContactsInteractionListener {
     fun moveContactUp(position: Int)
     fun moveContactDown(position: Int)
     fun getCurrentListSize(): Int
-    fun onSelectionOrderChanged()
-    fun getItemAt(position: Int): ContactItem?
+    fun onSelectionOrderChanged() // Вызывается при изменении выбора или порядка
+    fun getItemAt(position: Int): ContactItem? // Получить элемент по позиции
 }
 
 // Адаптер для списка контактов на экране выбора/сортировки
@@ -28,7 +28,11 @@ class ConfigureContactsAdapter(
 ) : ListAdapter<ContactItem, ConfigureContactsAdapter.ContactViewHolder>(ContactDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ContactViewHolder {
-        val binding = ConfigureContactItemBinding.inflate( LayoutInflater.from(parent.context), parent, false)
+        val binding = ConfigureContactItemBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
         return ContactViewHolder(binding, listener)
     }
 
@@ -38,74 +42,85 @@ class ConfigureContactsAdapter(
 
     // ViewHolder для одного контакта
     class ContactViewHolder(
-        private val binding: ConfigureContactItemBinding, // <<< Используется ViewBinding для элемента контакта
+        private val binding: ConfigureContactItemBinding,
         private val listener: ContactsInteractionListener
     ) : RecyclerView.ViewHolder(binding.root) {
 
         init {
             // Обработчик клика по всему элементу для изменения состояния выбора
             binding.root.setOnClickListener {
-                val currentPosition = absoluteAdapterPosition
+                val currentPosition = absoluteAdapterPosition // Используем absoluteAdapterPosition
                 if (currentPosition != RecyclerView.NO_POSITION) {
                     val contactItem = listener.getItemAt(currentPosition)
                     if (contactItem != null) {
-                        val newState = !contactItem.isSelected
-                        // Обновляем UI немедленно
+                        val newState = !contactItem.isSelected // Инвертируем состояние
+
+                        // Обновляем UI немедленно для отзывчивости
                         binding.contactCheckbox.isChecked = newState
                         binding.sortButtonsContainer.isVisible = newState
                         val listSize = listener.getCurrentListSize()
                         binding.buttonMoveUp.isEnabled = newState && currentPosition > 0
                         binding.buttonMoveDown.isEnabled = newState && currentPosition < listSize - 1
-                        // Уведомляем Activity
+
+                        // Уведомляем Activity об изменении состояния элемента
                         listener.onContactSelectedChanged(contactItem, newState)
-                        listener.onSelectionOrderChanged() // Сообщаем, что порядок мог измениться (для пересортировки)
-                    } else { Log.e("Adapter", "Could not get item at position $currentPosition") }
+                        // Уведомляем Activity, что порядок мог измениться (для пересортировки)
+                        listener.onSelectionOrderChanged()
+                    } else {
+                        Log.e("Adapter", "Could not get item at position $currentPosition from listener")
+                    }
+                }
+            }
+
+            // Обработчики для кнопок перемещения
+            binding.buttonMoveUp.setOnClickListener {
+                val currentPosition = absoluteAdapterPosition
+                if (currentPosition != RecyclerView.NO_POSITION) {
+                    listener.moveContactUp(currentPosition)
+                }
+            }
+            binding.buttonMoveDown.setOnClickListener {
+                val currentPosition = absoluteAdapterPosition
+                if (currentPosition != RecyclerView.NO_POSITION) {
+                    listener.moveContactDown(currentPosition)
                 }
             }
         }
 
         // Привязка данных контакта к элементам View
         fun bind(contact: ContactItem, position: Int, listSize: Int) {
-            binding.contactName.text = contact.name ?: "Unknown" // Отображаем имя или "Unknown"
+            // <<< ИСПОЛЬЗУЕМ СТРОКУ ИЗ РЕСУРСОВ >>>
+            binding.contactName.text = contact.name ?: itemView.context.getString(R.string.unknown_contact)
             binding.contactNumber.text = contact.numbers.firstOrNull() ?: "" // Отображаем первый номер
-            // Сбрасываем листенер перед установкой isChecked, чтобы избежать ложного срабатывания
+
             binding.contactCheckbox.setOnCheckedChangeListener(null)
             binding.contactCheckbox.isChecked = contact.isSelected
-            // Управляем видимостью и активностью кнопок сортировки
+
             binding.sortButtonsContainer.isVisible = contact.isSelected
             binding.buttonMoveUp.isEnabled = contact.isSelected && position > 0
             binding.buttonMoveDown.isEnabled = contact.isSelected && position < listSize - 1
 
             // Загрузка фото контакта с помощью Glide
             Glide.with(binding.contactPhoto.context)
-                .load(contact.photoUri)
-                .placeholder(R.drawable.ic_contact_placeholder)
-                .error(R.drawable.ic_contact_placeholder)
+                .load(contact.photoUri) // Загружаем URI фото
+                .placeholder(R.drawable.ic_contact_placeholder) // Заглушка на время загрузки
+                .error(R.drawable.ic_contact_placeholder) // Заглушка при ошибке
                 .circleCrop() // Делаем фото круглым
                 .into(binding.contactPhoto)
 
-            // Обработчики для кнопок перемещения
-            binding.buttonMoveUp.setOnClickListener {
-                if (absoluteAdapterPosition != RecyclerView.NO_POSITION) {
-                    listener.moveContactUp(absoluteAdapterPosition)
-                }
-            }
-            binding.buttonMoveDown.setOnClickListener {
-                if (absoluteAdapterPosition != RecyclerView.NO_POSITION) {
-                    listener.moveContactDown(absoluteAdapterPosition)
-                }
-            }
+            // <<< УСТАНАВЛИВАЕМ CONTENT DESCRIPTION ДЛЯ КНОПОК СОРТИРОВКИ >>>
+            binding.buttonMoveUp.contentDescription = itemView.context.getString(R.string.content_desc_move_up)
+            binding.buttonMoveDown.contentDescription = itemView.context.getString(R.string.content_desc_move_down)
         }
     }
 
     // DiffUtil для эффективного обновления списка контактов
     class ContactDiffCallback : DiffUtil.ItemCallback<ContactItem>() {
-        // Проверяем, один ли это и тот же элемент (по ID)
         override fun areItemsTheSame(oldItem: ContactItem, newItem: ContactItem): Boolean {
             return oldItem.id == newItem.id && oldItem.lookupKey == newItem.lookupKey
         }
-        // Проверяем, изменилось ли содержимое элемента (включая isSelected)
-        @SuppressLint("DiffUtilEquals") // Подавляем предупреждение, т.к. data class сравнение подходит
+
+        @SuppressLint("DiffUtilEquals")
         override fun areContentsTheSame(oldItem: ContactItem, newItem: ContactItem): Boolean {
             return oldItem == newItem
         }

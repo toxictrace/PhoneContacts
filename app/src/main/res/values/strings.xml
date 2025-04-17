@@ -1,129 +1,179 @@
 <resources>
-    <!-- Название приложения -->
+    <!-- App Name -->
     <string name="app_name">Phone Contacts</string>
 
-    <!-- Строки для MainActivity -->
-    <string name="main_activity_label">Главная</string>
-    <string name="info_add_widget">Добавьте виджет \'%1$s\' на главный экран.</string>
-    <string name="info_configure_widgets">Настроить виджеты:</string>
-    <string name="button_configure">Настроить</string>
-    <string name="error_opening_config">Не удалось открыть настройки: %1$s</string>
-    <string name="error_config_activity_not_found">Activity конфигурации не найдена.</string>
-    <string name="error_no_active_widgets">Активные виджеты не найдены.</string>
+    <!-- MainActivity -->
+    <string name="main_activity_label">Home</string>
+    <string name="info_add_widget">Add the \'%1$s\' widget to your home screen.</string>
+    <string name="info_configure_widgets">Configure widgets:</string>
+    <string name="button_configure">Configure</string>
+    <string name="error_opening_config">Failed to open settings: %1$s</string>
+    <string name="error_config_activity_not_found">Configuration activity not found.</string>
+    <string name="error_no_active_widgets">No active widgets found.</string>
+    <string name="loading">Loading…</string>
 
-    <!-- Строки для виджета -->
-    <string name="widget_label">Сетка контактов</string>
-    <string name="widget_description">Отображает выбранные контакты для быстрого доступа.</string>
-    <string name="widget_empty_text">Контакты не выбраны или не загружены</string>
-    <string name="widget_loading">Загрузка…</string>
-    <string name="widget_content_desc_dialer">Открыть журнал звонков</string>
-    <string name="widget_content_desc_refresh">Обновить виджет</string>
-    <string name="widget_refreshing">Обновление...</string>
+    <!-- Widget -->
+    <string name="widget_label">Contacts Grid</string>
+    <string name="widget_description">Displays selected contacts for quick access.</string>
+    <string name="widget_empty_text">No contacts selected or loaded</string>
+    <string name="widget_loading">Loading…</string> <!-- Reuse loading -->
+    <string name="widget_content_desc_dialer">Open call log</string>
+    <string name="widget_content_desc_refresh">Refresh widget</string>
+    <string name="widget_content_desc_call_type">Last call type</string>
+    <string name="widget_refreshing">Refreshing...</string>
 
-    <!-- Строки для Activity конфигурации виджета -->
-    <string name="widget_config_title">Настройка виджета контактов</string>
-    <string name="configure_title">Настройка виджета</string>
-    <string name="num_columns">Количество колонок</string>
-    <string name="item_height_title">Высота элемента (dp)</string>
-    <string name="contacts_order_title">Порядок контактов</string>
-    <string name="max_items_title">Макс. количество контактов</string>
-    <string name="max_items_summary">Укажите максимальное число контактов для отображения в виджете.</string>
-    <string name="enter_number">Введите число</string>
-    <string name="select_favorites_title">Выбрать избранные</string>
-    <string name="click_action_title">Действие по клику</string>
-    <string name="setting_show_unknown_title">Показывать неизвестные номера</string>
-    <string name="setting_show_unknown_summary_on">Номера не из контактов будут показаны в недавних</string>
-    <string name="setting_show_unknown_summary_off">В недавних будут показаны только номера из контактов</string>
-    <string name="setting_show_dialer_button_title">Показать кнопку "Звонилка"</string>
-    <string name="setting_show_dialer_button_summary_on">Кнопка для открытия журнала звонков будет видна</string>
-    <string name="setting_show_dialer_button_summary_off">Кнопка журнала звонков будет скрыта</string>
-    <string name="setting_show_refresh_button_title">Показать кнопку "Обновить"</string>
-    <string name="setting_show_refresh_button_summary_on">Кнопка для ручного обновления виджета будет видна</string>
-    <string name="setting_show_refresh_button_summary_off">Кнопка обновления будет скрыта</string>
-    <string name="setting_filter_old_unknown_title">Фильтровать старые неизвестные</string>
-    <string name="setting_filter_old_unknown_summary_on">Неизвестные номера старше 2 дней будут скрыты</string>
-    <string name="setting_filter_old_unknown_summary_off">Все неизвестные будут показаны (если включено выше)</string>
-    <string name="save_config">Сохранить</string>
-    <string name="save_configuration">Сохранить конфигурацию</string>
-    <string name="error_invalid_number">Пожалуйста, введите положительное число.</string>
+    <!-- Widget Configuration Activity -->
+    <string name="widget_config_title">Contacts Widget Settings</string>
+    <string name="configure_title">Widget Settings</string>
+    <!-- Section Headers -->
+    <string name="settings_theme_header">App Theme</string> <!-- <<< NEW >>> -->
+    <string name="settings_appearance_header">Appearance</string>
+    <string name="settings_contacts_header">Contacts</string>
+    <string name="settings_actions_header">Actions</string>
+    <string name="settings_widget_buttons_header">Widget Buttons</string>
+    <string name="settings_backup_header">Backup/Restore</string>
+    <!-- Settings Items -->
+    <string name="setting_monet_theme_title">Dynamic Theme (Monet)</string> <!-- <<< NEW >>> -->
+    <string name="setting_monet_theme_summary_on">Theme colors based on wallpaper</string> <!-- <<< NEW >>> -->
+    <string name="setting_monet_theme_summary_off">Using standard theme</string> <!-- <<< NEW >>> -->
+    <string name="applying_theme_toast">Applying theme...</string> <!-- <<< NEW >>> -->
+    <string name="num_columns">Number of columns</string>
+    <string name="item_height_title">Item height (dp)</string>
+    <string name="contacts_order_title">Contact order</string>
+    <string name="max_items_title">Max number of contacts</string>
+    <string name="max_items_summary">Set the maximum number of contacts to display in the widget.</string>
+    <string name="enter_number">Enter number</string>
+    <string name="select_favorites_title">Select favorites</string>
+    <string name="select_favorites_summary">Selected: %d</string>
+    <string name="select_favorites_summary_none">Not selected</string>
+    <string name="click_action_title">Click action</string>
+    <string name="setting_show_unknown_title">Show unknown numbers</string>
+    <string name="setting_show_unknown_summary_on">Numbers not in contacts will be shown in recents</string>
+    <string name="setting_show_unknown_summary_off">Only numbers from contacts will be shown in recents</string>
+    <string name="setting_show_dialer_button_title">Show Dialer button</string>
+    <string name="setting_show_dialer_button_summary_on">Button to open call log will be visible</string>
+    <string name="setting_show_dialer_button_summary_off">Call log button will be hidden</string>
+    <string name="setting_show_refresh_button_title">Show Refresh button</string>
+    <string name="setting_show_refresh_button_summary_on">Button for manual widget refresh will be visible</string>
+    <string name="setting_show_refresh_button_summary_off">Refresh button will be hidden</string>
+    <string name="setting_filter_old_unknown_title">Filter old unknown</string>
+    <string name="setting_filter_old_unknown_summary_on">Unknown numbers older than 2 days will be hidden</string>
+    <string name="setting_filter_old_unknown_summary_off">All unknown numbers will be shown (if enabled above)</string>
+    <string name="setting_compare_digits_title">Digits to compare number</string>
+    <string name="setting_compare_digits_summary">Number of last digits for searching in call log.</string>
+    <string name="setting_unknown_avatar_title">Avatar for unknown/no photo</string>
+    <string name="save_config">Save</string>
+    <string name="save_configuration">Save configuration</string>
+    <string name="error_invalid_number">Please enter a positive number.</string>
+    <string name="error_only_one_widget">Only one widget of this type can be added.</string>
+    <string name="export_cancelled">Export cancelled</string>
+    <string name="import_cancelled">Import cancelled</string>
+    <string name="error_not_implemented">Not implemented</string>
+    <string name="permission_required_toast">Permission required</string>
+    <string name="permission_denied_toast">Permission denied</string>
+    <string name="error_settings_json_not_found">settings.json not found in backup</string>
+    <string name="error_input_stream_null">Failed to open data stream</string>
+    <string name="error_no_settings_found_in_backup">No settings found for installed widgets in the backup file.</string>
+    <string name="error_invalid_backup_file_name">Invalid backup file selected. Name must start with \'PhoneContacts_\' and have a \'.zip\' extension.</string>
+    <string name="no_widget_settings_found_in_backup">No settings found for installed widgets in the backup file.</string>
 
-    <!-- Строки для опций порядка сортировки -->
-    <string name="sort_order_favorites">Избранные</string>
-    <string name="sort_order_favorites_recents">Избранные и Недавние</string>
-    <string name="sort_order_manual">Ручной (как выбрано)</string>
-    <string name="sort_order_starred">Только избранные (системные)</string>
-    <string name="sort_order_starred_recent">Избранные (сист.) и Недавние</string>
-    <string name="sort_order_starred_frequent">Избранные (сист.) и Частые</string>
-    <string name="sort_order_all_auto">Недавние и Частые</string>
+    <!-- Sort Order Options -->
+    <string name="sort_order_favorites">Favorites</string>
+    <string name="sort_order_favorites_recents">Favorites and Recents</string>
+    <!-- <<< ИЗМЕНЕНИЕ: Добавлена строка для новой опции >>> -->
+    <string name="sort_order_favorites_recents_frequent">Favorites, Recents and Frequent</string>
+    <string name="sort_order_favorites_frequent">Favorites and Frequent</string>
 
-    <!-- Строки для опций действия по клику -->
-    <string name="click_action_dial">Открыть номер в звонилке</string>
-    <string name="click_action_confirm_call">Показать подтверждение перед звонком</string>
-    <string name="click_action_call">Сразу звонить (требует разрешения)</string>
+    <!-- Click Action Options -->
+    <string name="click_action_dial">Open number in dialer</string>
+    <string name="click_action_confirm_call">Show confirmation before call</string>
+    <string name="click_action_call">Call immediately (requires permission)</string>
 
-    <!-- Строки для Activity выбора контактов (SelectContactsActivity) -->
-    <string name="select_contacts_activity_label">Выбор контактов</string>
-    <string name="select_contacts_done">Готово</string>
-    <string name="permission_needed_select">Для выбора контактов требуется разрешение на доступ к контактам.</string>
-    <string name="no_contacts_found">Контакты с номерами телефонов не найдены.</string>
-    <string name="error_loading_contacts">Ошибка загрузки контактов.</string>
-    <string name="grant_permission_button">Предоставить разрешение</string>
+    <!-- Avatar Options -->
+    <string name="avatar_mode_default">Standard (placeholder)</string>
+    <string name="avatar_mode_custom">Custom avatar</string>
+    <string name="avatar_mode_custom_selected">Custom avatar (selected)</string>
+    <string name="error_selecting_avatar">Failed to select avatar</string>
+    <string name="error_copying_avatar">Error copying avatar: %s</string>
+    <string name="error_copying_avatar_unknown">Unknown error copying avatar</string>
+    <string name="avatar_set_successfully">Avatar set successfully</string>
+    <string name="error_launching_picker">Failed to launch image picker</string>
 
-    <!-- Строки для Activity подтверждения звонка (CallConfirmActivity) -->
-    <string name="call_confirm_title">Позвонить?</string>
-    <string name="call_confirm_call_button">Позвонить</string>
-    <string name="call_confirm_cancel_button">Отмена</string>
-    <string name="call_confirmation_call_button">Позвонить</string>
-    <string name="call_confirmation_cancel_button">Отмена</string>
-    <string name="unknown_contact">Неизвестный</string>
-    <string name="error_phone_number_missing">Ошибка: номер телефона не найден.</string>
-    <string name="error_no_call_app">Не найдено приложение для звонка.</string>
-    <string name="error_call_failed">Не удалось совершить звонок.</string>
-    <string name="last_call_label">Последний звонок:</string>
-    <string name="call_count_label">Звонков:</string>
-    <string name="total_duration_label">Длительность:</string>
-    <string name="call_stats_not_available">Статистика недоступна</string>
-    <string name="call_stats_permission_needed">Нужно разрешение на чтение журнала звонков</string>
+    <!-- Select Contacts Activity -->
+    <string name="select_contacts_activity_label">Select contacts</string>
+    <string name="select_contacts_done">Done</string>
+    <string name="permission_needed_select">Access to contacts is required to select contacts.</string>
+    <string name="permission_denied_select">Permission to access contacts denied.</string>
+    <string name="error_permission_needed_select_toast">Permission is required to select contacts.</string>
+    <string name="no_contacts_found">No contacts with phone numbers found.</string>
+    <string name="error_loading_contacts">Error loading contacts.</string>
+    <string name="grant_permission_button">Grant permission</string>
+    <string name="fab_description_done">Done</string>
+    <string name="content_desc_move_up">Move Up</string>
+    <string name="content_desc_move_down">Move Down</string>
 
-    <!-- Строки для разрешений -->
-    <string name="permission_needed_title">Требуется разрешение</string>
-    <string name="grant_permission">Предоставить</string>
-    <string name="continue_without_permission">Продолжить без разрешения</string>
-    <string name="permission_needed">Требуется разрешение</string>
-    <string name="permission_call_needed_for_call_options">Для опций "Звонок" и "Подтверждение звонка" требуется разрешение на совершение вызовов.</string>
-    <string name="permission_call_log_needed_favorites_recents">Для отображения недавних звонков в виджете требуется разрешение на доступ к журналу вызовов.</string>
-    <string name="warning_recents_unavailable">Предупреждение: Недавние звонки не будут отображаться без разрешения.</string>
-    <string name="call_permission_revoked">Разрешение на звонки было отозвано. Открываю номер в звонилке.</string>
-    <string name="permission_contacts_rationale">Разрешение на доступ к контактам необходимо для отображения их в виджете и выбора избранных.</string>
-    <string name="permission_call_log_needed">Для автоматической сортировки требуется доступ к журналу звонков.</string>
 
-    <!-- Строки для диалога MIUI (DeviceUtils) -->
-    <string name="miui_dialog_title">Дополнительные разрешения</string>
-    <string name="miui_dialog_message">На устройствах Xiaomi (MIUI)...</string>
-    <string name="miui_dialog_settings_button">Перейти в настройки</string>
-    <string name="miui_dialog_acknowledge_button">Понятно / Позже</string>
-    <string name="miui_dialog_cant_open_settings">Не удалось открыть настройки...</string>
-    <string name="miui_dialog_check_permissions_later">Проверьте \'Другие разрешения\'...</string>
+    <!-- Call Confirm Activity -->
+    <string name="call_confirm_title">Call?</string>
+    <string name="call_confirm_call_button">Call</string>
+    <string name="call_confirm_cancel_button">Cancel</string>
+    <string name="unknown_contact">Unknown</string>
+    <string name="error_phone_number_missing">Error: Phone number not found.</string>
+    <string name="error_no_call_app">No application found to make a call.</string>
+    <string name="error_call_failed">Failed to make a call.</string>
+    <string name="error_widget_id_missing">Error: Widget ID not provided</string>
+    <string name="error_processing_click">Error processing click</string>
+    <string name="error_action_app_not_found">Application for action not found</string>
+    <string name="error_opening_dialer">Failed to open dialer</string>
+    <!-- Call Stats -->
+    <string name="last_call_label">Last call:</string>
+    <string name="call_count_label">Calls:</string>
+    <string name="total_duration_label">Duration:</string>
+    <string name="call_stats_not_available">Stats unavailable</string>
+    <string name="call_stats_permission_needed">Call log permission needed</string>
+    <!-- Formatting Strings for Stats -->
+    <string name="call_count_label_with_value">Calls: %d</string>
+    <string name="total_duration_label_with_value">Duration: %s</string>
 
-    <!-- Общие строки -->
-    <string name="unknown">Неизвестный</string>
-    <string name="cancel">Отмена</string>
+
+    <!-- Permissions -->
+    <string name="permission_needed_title">Permission Required</string>
+    <string name="grant_permission">Grant</string>
+    <string name="continue_without_permission">Continue without permission</string>
+    <string name="permission_needed">Permission required</string>
+    <string name="permission_call_needed_for_call_options">Permission to make calls is required for "Call" and "Confirm Call" options.</string>
+    <string name="permission_call_log_needed_favorites_recents">Access to the call log is required to display recent calls in the widget.</string>
+    <string name="warning_recents_unavailable">Warning: Recent calls will not be displayed without permission.</string>
+    <string name="call_permission_revoked">Call permission was revoked. Opening number in dialer.</string>
+    <string name="permission_contacts_rationale">Contacts permission is needed to display them in the widget and select favorites.</string>
+    <string name="permission_storage_needed_for_avatar">Permission to access images is required to select a custom avatar.</string>
+
+    <!-- MIUI Dialog -->
+    <string name="miui_dialog_title">Additional Permissions</string>
+    <string name="miui_dialog_message">On Xiaomi (MIUI) devices...</string> <!-- Shortened for brevity, full text in DeviceUtils -->
+    <string name="miui_dialog_settings_button">Go to settings</string>
+    <string name="miui_dialog_acknowledge_button">Got it / Later</string>
+    <string name="miui_dialog_cant_open_settings">Failed to open settings. Please do it manually.</string>
+    <string name="miui_dialog_check_permissions_later">Check \'Other permissions\' in app settings...</string>
+
+    <!-- Common Strings -->
+    <string name="unknown">Unknown</string>
+    <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
-    <string name="settings_export_title">Экспорт настроек</string>
-    <string name="settings_export_summary">Сохранить настройки всех виджетов в файл</string>
-    <string name="settings_import_title">Импорт настроек</string>
-    <string name="settings_import_summary">Загрузить настройки для виджетов из файла</string>
-    <string name="backup_settings">Экспорт настроек</string> <!-- Повторяется, но нужно -->
-    <string name="restore_settings">Импорт настроек</string> <!-- Повторяется, но нужно -->
-    <string name="backup_successful">Настройки экспортированы</string>
-    <string name="backup_failed">Ошибка экспорта: %s</string>
-    <string name="restore_successful">Настройки импортированы</string>
-    <string name="restore_failed">Ошибка импорта: %s</string>
-    <string name="no_widgets_to_backup">Нет активных виджетов для экспорта</string>
-    <string name="no_widgets_to_restore">Нет активных виджетов для импорта</string> <!-- Добавил -->
-    <string name="error_reading_file">Ошибка чтения файла</string>
-    <string name="error_writing_file">Ошибка записи файла</string>
-    <string name="error_parsing_backup">Ошибка разбора файла бэкапа</string>
-    <string name="settings_reloading">Перезагрузка настроек...</string>
+    <string name="settings_export_title">Export settings</string>
+    <string name="settings_export_summary">Save settings for all widgets to a file (ZIP)</string>
+    <string name="settings_import_title">Import settings</string>
+    <string name="settings_import_summary">Load settings for widgets from a file (ZIP)</string>
+    <string name="backup_successful">Settings exported</string>
+    <string name="backup_failed">Export failed: %s</string>
+    <string name="restore_successful">Settings imported</string>
+    <string name="restore_failed">Import failed: %s</string>
+    <string name="no_widgets_to_backup">No active widgets to export</string>
+    <string name="no_widgets_to_restore">No active widgets to import settings for</string>
+    <string name="error_reading_file">Error reading file: %s</string>
+    <string name="error_writing_file">Error writing file</string>
+    <string name="error_parsing_backup">Error parsing backup file: %s</string>
+    <string name="error_reading_zip">Error reading ZIP archive: %s</string>
+    <string name="settings_reloading">Reloading settings…</string>
 
 </resources>

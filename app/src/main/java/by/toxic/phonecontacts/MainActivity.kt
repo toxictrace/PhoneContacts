@@ -6,14 +6,19 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast // <<<--- ДОБАВЛЕН ИМПОРТ
-import by.toxic.phonecontacts.databinding.ActivityMainBinding // Используем ViewBinding
+import android.widget.Toast
+import by.toxic.phonecontacts.databinding.ActivityMainBinding
+import android.os.Build // Добавлен импорт
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // >>> Устанавливаем тему ДО super.onCreate() <<<
+        setTheme(AppSettings.getSelectedThemeResId(this))
+        // >>> КОНЕЦ УСТАНОВКИ ТЕМЫ <<<
+
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -23,6 +28,7 @@ class MainActivity : AppCompatActivity() {
 
         if (hasWidgets) {
             // Если виджеты есть, показываем кнопку настроек
+            // TODO: Заменить строки на ресурсы
             binding.textViewInfo.text = "Настроить виджеты:" // Меняем текст
             binding.buttonConfigure.visibility = View.VISIBLE
             binding.buttonConfigure.setOnClickListener {
@@ -32,6 +38,7 @@ class MainActivity : AppCompatActivity() {
             }
         } else {
             // Если виджетов нет, показываем инструкцию
+            // TODO: Заменить строки на ресурсы
             binding.textViewInfo.text = "Добавьте виджет 'Contacts Grid' на главный экран."
             binding.buttonConfigure.visibility = View.GONE
         }
@@ -75,16 +82,20 @@ class MainActivity : AppCompatActivity() {
                 try {
                     startActivity(configureIntent)
                 } catch (e: Exception) {
+                    // TODO: Заменить строки на ресурсы
                     Toast.makeText(this, "Не удалось открыть настройки: ${e.message}", Toast.LENGTH_LONG).show()
                 }
             } else {
+                // TODO: Заменить строки на ресурсы
                 Toast.makeText(this, "Activity конфигурации не найдена.", Toast.LENGTH_SHORT).show()
             }
 
         } else {
             // На всякий случай, если виджеты пропали между проверкой и нажатием
+            // TODO: Заменить строки на ресурсы
             Toast.makeText(this, "Активные виджеты не найдены.", Toast.LENGTH_SHORT).show()
             // Обновляем UI
+            // TODO: Заменить строки на ресурсы
             binding.textViewInfo.text = "Добавьте виджет 'Contacts Grid' на главный экран."
             binding.buttonConfigure.visibility = View.GONE
         }

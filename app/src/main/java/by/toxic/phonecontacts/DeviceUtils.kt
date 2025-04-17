@@ -36,16 +36,16 @@ object DeviceUtils {
         onAcknowledged: () -> Unit
     ) {
         AlertDialog.Builder(context)
-            .setTitle("Дополнительные разрешения")
+            .setTitle(R.string.miui_dialog_title) // Используем ресурсы строк
             .setMessage(
                 "На устройствах Xiaomi (MIUI) для корректной работы виджета " +
-                        "(особенно для совершения звонков по клику) может потребоваться " +
-                        "вручную включить разрешения:\n\n" +
+                        "(особенно для совершения звонков по клику и отображения поверх других окон) может потребоваться " +
+                        "вручную включить разрешения в разделе 'Другие разрешения':\n\n" +
                         "• Отображение всплывающих окон\n" +
-                        "• Ярлыки рабочего стола\n\n" +
-                        "Перейдите в настройки приложения и проверьте раздел 'Другие разрешения'."
+                        "• Ярлыки рабочего стола\n"
+                // Сообщение немного упрощено для ясности
             )
-            .setPositiveButton("Перейти в настройки") { dialog, _ ->
+            .setPositiveButton(R.string.miui_dialog_settings_button) { dialog, _ ->
                 try {
                     val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
                     intent.data = Uri.parse("package:${context.packageName}")
@@ -55,13 +55,13 @@ object DeviceUtils {
                     // На случай, если Intent не сработает
                     android.widget.Toast.makeText(
                         context,
-                        "Не удалось открыть настройки. Пожалуйста, сделайте это вручную.",
+                        R.string.miui_dialog_cant_open_settings, // Используем ресурс
                         android.widget.Toast.LENGTH_LONG
                     ).show()
                 }
                 dialog.dismiss()
             }
-            .setNegativeButton("Понятно / Позже") { dialog, _ ->
+            .setNegativeButton(R.string.miui_dialog_acknowledge_button) { dialog, _ ->
                 onAcknowledged() // Уведомляем, что пользователь ознакомлен
                 dialog.dismiss()
             }

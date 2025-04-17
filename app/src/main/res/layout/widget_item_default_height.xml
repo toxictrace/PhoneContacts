@@ -4,34 +4,37 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/widget_item_container"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/widget_item_default_height">
+    android:layout_height="@dimen/widget_item_default_height"> <!-- Используем размер из dimens -->
 
-<ImageView
-android:id="@+id/widget_item_photo"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:scaleType="centerCrop"
-android:src="@drawable/ic_contact_placeholder"
-android:contentDescription="@null" />
+    <!-- Изображение контакта (или аватар) -->
+    <ImageView
+        android:id="@+id/widget_item_photo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/anonim"
+    android:contentDescription="@null" />
 
-<TextView
-android:id="@+id/widget_item_name"
-android:layout_width="match_parent"
-android:layout_height="wrap_content"
-android:layout_gravity="bottom"
-android:paddingStart="6dp"
-android:paddingEnd="6dp"
-android:paddingTop="4dp"
-android:paddingBottom="4dp"
-android:gravity="center"
-android:textAlignment="center"
-android:maxLines="3"
-android:ellipsize="end"
-android:textColor="@color/white"
-android:textSize="11sp"
+    <!-- Имя контакта -->
+    <TextView
+        android:id="@+id/widget_item_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:paddingStart="6dp"
+        android:paddingEnd="6dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:maxLines="3"
+    android:ellipsize="end"
+    android:textColor="@color/white"
+    android:textSize="11sp"
     android:background="@drawable/text_overlay_background"
-tools:text="Имя Контакта" />
+    tools:text="Имя Контакта Фамилия" /> <!-- Пример текста для preview -->
 
+    <!-- Иконка типа последнего звонка -->
     <ImageView
         android:id="@+id/widget_item_call_type_icon"
         android:layout_width="18dp"
@@ -44,6 +47,6 @@ tools:text="Имя Контакта" />
     android:layout_gravity="top|end"
     tools:src="@drawable/incoming"
     tools:visibility="visible"
-    android:contentDescription="Тип последнего звонка" />
+    android:contentDescription="@string/widget_content_desc_call_type" /> <!-- Используем строку ресурса -->
 
-    </FrameLayout>
+</FrameLayout>
